@@ -1,5 +1,7 @@
 # [Gold III] 크게 만들기 - 2812 
 
+다른 사람 코드를 참고해 작성
+
 [문제 링크](https://www.acmicpc.net/problem/2812) 
 
 ### 성능 요약
