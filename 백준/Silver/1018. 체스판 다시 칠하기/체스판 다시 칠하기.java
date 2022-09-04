@@ -38,35 +38,31 @@ public class Main {
     }
 
     public static int getChangeVal(int y, int x){
+
         int changeValStartBlack = 0;
+        int changeValStartWhite = 0;
+
         boolean needBlack = true;
         for (int i=y; i<y+8; i++){
             for(int j=x; j<x+8; j++){
-                if (needBlack && (inputArr[i][j] == 'W')){
-                    changeValStartBlack++;
-                }
-                if(!needBlack && (inputArr[i][j] == 'B')){
-                    changeValStartBlack++;
+                if (needBlack){
+                    if(inputArr[i][j] == 'W'){
+                        changeValStartBlack++;
+                    }else {
+                        changeValStartWhite++;
+                    }
+                }else{ // needWhite
+                    if(inputArr[i][j] == 'B'){
+                        changeValStartBlack++;
+                    }else{
+                        changeValStartWhite++;
+                    }
                 }
                 needBlack = !needBlack;
             }
             needBlack = !needBlack;
         }
 
-        int changeValStartWhite = 0;
-        needBlack = false;
-        for (int i=y; i<y+8; i++){
-            for(int j=x; j<x+8; j++){
-                if (needBlack && (inputArr[i][j] == 'W')){
-                    changeValStartWhite++;
-                }
-                if(!needBlack && (inputArr[i][j] == 'B')){
-                    changeValStartWhite++;
-                }
-                needBlack = !needBlack;
-            }
-            needBlack = !needBlack;
-        }
         return (changeValStartWhite > changeValStartBlack) ? changeValStartBlack : changeValStartWhite;
     }
 
