@@ -16,15 +16,15 @@ public class Main {
         sb = new StringBuffer();
 
         int count = Integer.parseInt(br.readLine());
-        int[] sortArr = new int[count];
+        List<Integer> sortList = new ArrayList<>();
         for(int i=0; i<count; i++){
-            sortArr[i] = Integer.parseInt(br.readLine());
+            sortList.add(Integer.parseInt(br.readLine()));
         }
-        Arrays.sort(sortArr);
+        Collections.sort(sortList);
         for(int i=0; i<count; i++){
-            sb.append(sortArr[i] + " ");
+            sb.append(sortList.get(i) + " ");
         }
         System.out.println(sb);
     }
-    
+
 }
