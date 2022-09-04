@@ -16,24 +16,23 @@ public class Main {
         sb = new StringBuffer();
 
         int count = Integer.parseInt(br.readLine());
-        int[] prefixSum = new int[10000001];
-        int maxVal = 0;
+        int[] prefixSum = new int[10001];
         for(int i=0; i<count; i++){
-            int input = Integer.parseInt(br.readLine());
-            prefixSum[input]+= 1;
-            if(maxVal < input)
-                maxVal = input;
+            prefixSum[Integer.parseInt(br.readLine())]++;
         }
 
-        for(int i=0; i<=maxVal; i++){
+        for(int i=0; i< prefixSum.length; i++){
             while (prefixSum[i] > 0){
+                prefixSum[i]--;
                 sb.append(i);
-                prefixSum[i] -= 1;
                 sb.append("\n");
             }
         }
         sb.setLength(sb.length()-1);
         System.out.println(sb);
+
+        br.close();
+        sb.setLength(0);
     }
 
 }
