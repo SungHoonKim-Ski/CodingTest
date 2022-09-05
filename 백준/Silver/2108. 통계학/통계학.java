@@ -6,7 +6,6 @@ import java.util.*;
 
 public class Main {
 
-    //    private static Scanner sc = new Scanner(System.in);
     private static BufferedReader br;
     private static StringBuffer sb;
 
@@ -17,46 +16,44 @@ public class Main {
 
         String[] inputSplit = br.readLine().split(" ");
         int countElement = Integer.parseInt(inputSplit[0]);
-        int arithmeticMean = 0;
 
         int[] prefixArr = new int[4001];
         int[] negPrefixArr = new int[4001];
 
-        for(int i=0; i<countElement; i++){
-            int tmp = Integer.parseInt(br.readLine());
+        int maxVal = -4001;
+        int minVal = 4001;
 
+        int sum = 0;
+
+        for(int i=0; i<countElement; i++){
+
+            int tmp = Integer.parseInt(br.readLine());
+            if(maxVal < tmp){
+                maxVal = tmp;
+            }
+            if(minVal > tmp){
+                minVal = tmp;
+            }
             if(tmp < 0){
-                negPrefixArr[Math.abs(tmp)]++;
+                negPrefixArr[-tmp]++;
             }else{
                 prefixArr[tmp]++;
             }
-
-            arithmeticMean += tmp;
+            sum += tmp;
         }
 
-        arithmeticMean = calArithmeticMean(arithmeticMean, countElement);
-        int median = calMedian(prefixArr, negPrefixArr, countElement);
-        int mode = calMode(prefixArr, negPrefixArr);
-        int range = calRange(prefixArr, negPrefixArr);
-
-        sb.append(arithmeticMean);
+        sb.append((int)Math.round(sum / (double)countElement));
         sb.append("\n");
-        sb.append(median);
+        sb.append(calMedian(prefixArr, negPrefixArr, countElement));
         sb.append("\n");
-        sb.append(mode);
+        sb.append(calMode(prefixArr, negPrefixArr));
         sb.append("\n");
-        sb.append(range);
+        sb.append((maxVal != minVal) ? maxVal - minVal : 0);
 
         System.out.println(sb);
 
         br.close();
         sb.setLength(0);
-
-    }
-
-    public static int calArithmeticMean(int sumElement, int countElement){
-
-        return (int)Math.round(sumElement/(double)countElement);
     }
 
     public static int calMedian(int[] prefixArr, int[] negPrefixArr, int countElement){
@@ -116,46 +113,4 @@ public class Main {
         }
 
     }
-
-    public static int calRange(int[] prefixArr, int[] negPrefixArr){
-
-        int range = 0;
-        boolean flag = false;
-        for(int i=4000; i>=0; i--){
-            if(negPrefixArr[i] > 0){
-                range += i;
-                flag = true;
-                break;
-            }
-        }
-        if(!flag){
-            for(int i=0; i<4001; i++){
-                if(prefixArr[i] > 0){
-                    range -= i;
-                    break;
-                }
-            }
-        }
-
-        flag = false;
-        for(int i=4000; i>=0; i--){
-            if(prefixArr[i] > 0){
-                range += i;
-                flag = true;
-                break;
-            }
-        }
-
-        if(!flag){
-            for(int i=0; i<4001; i++){
-                if(negPrefixArr[i] > 0){
-                    range -= i;
-                    break;
-                }
-            }
-        }
-
-        return range;
-    }
-
 }
