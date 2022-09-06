@@ -19,12 +19,8 @@ public class Main {
 
         int[] inputArr = new int[size];
         String[] inputSplit = br.readLine().split(" ");
-        int minVal = Integer.MAX_VALUE;
         for(int i=0; i<size; i++){
             int input = Integer.parseInt(inputSplit[i]);
-            if(minVal > input){
-                minVal = input;
-            }
             inputArr[i] = input;
         }
 
@@ -33,20 +29,16 @@ public class Main {
 
         HashMap<Integer, Integer> compressInputMap = new HashMap<>();
         // realInput, compressInput  pair
-        int i=0;
         int compressIndex = 0;
-        while(i < sortedInputArr.length){
+        for(int i=0; i < sortedInputArr.length; i++){
             if(!compressInputMap.containsKey(sortedInputArr[i])){
-                compressInputMap.put(sortedInputArr[i], compressIndex);
-                compressIndex++;
+                compressInputMap.put(sortedInputArr[i], compressIndex++);
             }
-            i++;
         }
 
-        for(i=0; i<size; i++){
+        for(int i=0; i<size; i++){
             sb.append(compressInputMap.get(inputArr[i]) + " ");
         }
-
 
         sb.setLength(sb.length()-1);
         System.out.println(sb);
@@ -54,6 +46,4 @@ public class Main {
         br.close();
         sb.setLength(0);
     }
-
-
 }
