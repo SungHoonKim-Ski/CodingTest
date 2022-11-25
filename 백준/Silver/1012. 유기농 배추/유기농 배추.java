@@ -1,44 +1,38 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.StringTokenizer;
 
-public class Main {
-
+class Main {
     static BufferedReader br;
+    static StringBuffer sb;
     public static int[][] cabbageFarm;
     public static boolean[][] isChecked;
 
-    public static void main(String args[]) throws IOException {
-
+    public static void main(String[] args) throws IOException {
         br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
-
-        int farmCount = Integer.parseInt(br.readLine());
+        sb = new StringBuffer();
 
         cabbageFarm = new int[51][51];
         isChecked = new boolean[51][51];
 
-        for(int i=0; i<farmCount; i++) {
-            sb.append(getCabbage()).append('\n');
+        int cases = Integer.parseInt(br.readLine());
+        for(int i=0; i<cases; i++){
+            getCabbage();
         }
-
-        sb.setLength(sb.length()-1);
         System.out.println(sb);
     }
 
-    static int y;
-    static int x;
-
-    public static int getCabbage() throws IOException{
+    static int farmY;
+    static int farmX;
+    public static void getCabbage() throws IOException{
 
         String[] input = br.readLine().split(" ");
-        y = Integer.parseInt(input[0]);
-        x = Integer.parseInt(input[1]);
+        farmY = Integer.parseInt(input[0]);
+        farmX = Integer.parseInt(input[1]);
         int cabbageCount = Integer.parseInt(input[2]);
-
         initArr();
-
+        bugCount = 0;
 
         for (int j = 0; j < cabbageCount; j++) {
             input = br.readLine().split(" ");
@@ -46,40 +40,34 @@ public class Main {
             int tmpX = Integer.parseInt(input[1]);
             cabbageFarm[tmpY][tmpX] = 1;
         }
-
-        int insectCount = 0;
-
-        for(int i=0; i<y; i++){
-            for(int j=0; j<x; j++){
-                insectCount += calBug(i, j);
+        for(int i=0; i<farmY; i++){
+            for(int j=0; j<farmX; j++){
+                BFS(i, j, false);
             }
         }
 
-        return insectCount;
+        sb.append(bugCount).append('\n');
     }
 
-    public static int calBug(int curY, int curX){
+    static int bugCount;
 
-
+    public static void BFS(int y, int x, boolean isCalled){
         int[] dy = {0, 1, 0, -1};
         int[] dx = {1, 0, -1, 0};
 
-        int returnVal = 0;
-        if(cabbageFarm[curY][curX] == 1) {
-            cabbageFarm[curY][curX] = 0;
-            if(!isChecked[curY][curX]){
-                isChecked[curY][curX] = true;
-                returnVal = 1;
-            }
-            for(int k=0; k<4; k++){
-                int tmpY = curY + dy[k];
-                int tmpX = curX + dx[k];
-                if(tmpX < 0 || tmpY < 0 | tmpX == x || tmpY == y) continue;
-                isChecked[tmpY][tmpX] = true;
-                calBug(tmpY, tmpX);
+        if(isChecked[y][x]) return;
+        isChecked[y][x] = true;
+        if(cabbageFarm[y][x] == 1){
+            if(!isCalled) bugCount++;
+            for(int i=0; i<4; i++){
+                int nextY = y + dy[i];
+                int nextX = x + dx[i];
+                if(nextX < 0 || nextX == farmX || nextY < 0 || nextY == farmY) continue;
+                if(cabbageFarm[nextY][nextX] == 1){
+                    BFS(nextY, nextX, true);
+                }
             }
         }
-        return returnVal;
     }
 
     public static void initArr(){
