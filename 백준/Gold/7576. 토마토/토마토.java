@@ -3,73 +3,59 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
+class Main{
 
-public class Main {
+    static int[][] tomatoArr;
+    static int[] dy = {0, 1, 0, -1};
+    static int[] dx = {1, 0, -1, 0};
+    static int dayCount = 0;
 
-    //    private static Scanner sc = new Scanner(System.in);
-    private static BufferedReader br;
-    private static StringBuffer sb;
+    public static void main(String[] args)throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        st = new StringTokenizer(br.readLine());
+        int x = Integer.parseInt(st.nextToken());
+        int y = Integer.parseInt(st.nextToken());
+        tomatoArr = new int[y][x];
 
-    public static void main(String args[]) throws IOException {
-
-        br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuffer();
-
-        String[] input = br.readLine().split(" ");
-        int x = Integer.parseInt(input[0]);
-        int y = Integer.parseInt(input[1]);
-
+        Queue<int[]> tomatoQueue = new LinkedList<>();
         int zeroCount = 0;
-        int[][] tomato = new int[y][x];
-        Queue<int[]> queue = new LinkedList<>();
         for(int i=0; i<y; i++){
-            input = br.readLine().split(" ");
+            st = new StringTokenizer(br.readLine());
             for(int j=0; j<x; j++){
-                int tmp = Integer.parseInt(input[j]);
-                if(tmp == 0){
+                tomatoArr[i][j] = Integer.parseInt(st.nextToken());
+                if(tomatoArr[i][j] == 0){
                     zeroCount++;
-                }else if(tmp == 1){
-                    queue.add(new int[]{i, j});
+                }else if(tomatoArr[i][j] == 1){
+                    tomatoQueue.add(new int[] {i, j});
                 }
-                tomato[i][j] = tmp;
             }
         }
-
-        int dayCount = 0;
-        int[] dx = {1, 0, -1, 0};
-        int[] dy = {0, 1, 0, -1};
 
         while (zeroCount > 0){
             Queue<int[]> nextDayQueue = new LinkedList<>();
-            boolean isChanged = false;
-            while (!queue.isEmpty()){
-                int[] freshTomato = queue.poll();
-                int curY = freshTomato[0];
-                int curX = freshTomato[1];
-
+            while (!tomatoQueue.isEmpty()){
+                int[] tmpArr = tomatoQueue.poll();
+                int tmpY = tmpArr[0];
+                int tmpX = tmpArr[1];
                 for(int i=0; i<4; i++){
-                    int tmpY = curY + dy[i];
-                    int tmpX = curX + dx[i];
-
-                    if(tmpX < 0 || tmpY < 0 | tmpX == x || tmpY == y) continue;
-
-                    if(tomato[tmpY][tmpX] == 0){
-                        tomato[tmpY][tmpX]++;
+                    int nextY = tmpY + dy[i];
+                    int nextX = tmpX + dx[i];
+                    if(nextX < 0 || nextY < 0 | nextX == x || nextY == y) continue;
+                    if(tomatoArr[nextY][nextX] == 0){
+                        nextDayQueue.add(new int[]{nextY, nextX});
+                        tomatoArr[nextY][nextX] = 1;
                         zeroCount--;
-                        isChanged = true;
-                        nextDayQueue.add(new int[]{tmpY, tmpX});
                     }
                 }
             }
-            if(!isChanged){
+            if(nextDayQueue.isEmpty()){
                 dayCount = -1;
                 break;
             }
-            queue.addAll(nextDayQueue);
+            tomatoQueue = nextDayQueue;
             dayCount++;
         }
-
         System.out.println(dayCount);
     }
-
 }
