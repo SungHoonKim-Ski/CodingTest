@@ -42,16 +42,12 @@ class Main {
         System.out.println(sb);
     }
 
-    
-    
+
+
     public static void DFS(int start){ // recursive
 
-        if (!IsVisited[start]) {
-            sb.append(start).append(' ');
-            IsVisited[start] = true;
-        }
-
-
+        sb.append(start).append(' ');
+        IsVisited[start] = true;
         for (int i=1; i<=N; i++) {
             if (!IsVisited[i] && Graph[start][i] == 1) {
                 DFS(i);
@@ -69,10 +65,10 @@ class Main {
             if (!IsVisited[point]) {
                 sb.append(point).append(' ');
                 IsVisited[point] = true;
-            }
-            for (int i=1; i<=N; i++) {
-                if (!IsVisited[i] && Graph[i][point] == 1) {
-                    queue.add(i);
+                for (int i=1; i<=N; i++) {
+                    if (!IsVisited[i] && Graph[i][point] == 1) {
+                        queue.add(i);
+                    }
                 }
             }
         }
