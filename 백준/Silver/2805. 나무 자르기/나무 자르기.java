@@ -1,51 +1,95 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
-class Main {
-    static BufferedReader br;
-    static StringBuffer sb;
+public class Main {
+    static FastReader scan = new FastReader();
+    static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws IOException {
+    static int N, M;
+    static int[] A;
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuffer();
+    static void input() {
+        N = scan.nextInt();
+        M = scan.nextInt();
+        A = new int[N + 1];
+        for (int i = 1; i <= N; i++) {
+            A[i] = scan.nextInt();
+        }
+    }
 
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int n = Integer.parseInt(st.nextToken());
-        long m = Long.parseLong(st.nextToken());
+    static boolean determination(int H) {
+        long sum = 0;
+        for (int i = 1; i <= N; i++) {
+            if(A[i] > H) {
+                sum += A[i] - H;
+            }
+        }
+        return sum >= M;
+    }
 
-        long[] arrN = new long[n];
-        st = new StringTokenizer(br.readLine());
-        for (int i=0; i<n; i++) {
-            arrN[i] = Long.parseLong(st.nextToken());
+    static void pro() {
+        long L = 0, R = 2000000000, ans = 0;
+        while (L <= R) {
+            int mid = (int) ((L + R) / 2);
+            if (determination(mid)) {
+                ans = mid;
+                L = mid + 1;
+            } else {
+                R = mid - 1;
+            }
+        }
+        System.out.println(ans);
+    }
+
+    public static void main(String[] args) {
+        input();
+        pro();
+    }
+
+
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
         }
 
-        Arrays.sort(arrN);
+        public FastReader(String s) throws FileNotFoundException {
+            br = new BufferedReader(new FileReader(new File(s)));
+        }
 
-        long min = 0;
-        long max = arrN[n-1];
-        long res = 0;
-
-        while (min <= max) {
-
-            long mid = (min + max) / 2;
-            long count = 0;
-            for (int i=0; i<n; i++) {
-                long tmp = arrN[i] - mid;
-                if (tmp > 0) {
-                    count += tmp;
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
-
-            if (count >= m) {
-                min = mid + 1;
-                res = mid;
-            }else {
-                max = mid - 1;
-            }
+            return st.nextToken();
         }
-        System.out.println(res);
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
     }
 }
