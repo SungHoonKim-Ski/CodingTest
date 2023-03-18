@@ -22,7 +22,7 @@ public class Main {
     }
 
     static void pro() {
-        long L = 1, R = Math.min((long) N * N, 10000000000L), ans = 1;
+        long L = 1, R = Math.min((long) N * N, 1000000000), ans = 1;
         while (L <= R) {
             long mid = (L + R) / 2;
             if (determination(mid)) {
