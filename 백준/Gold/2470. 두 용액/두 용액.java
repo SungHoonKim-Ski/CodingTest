@@ -16,55 +16,24 @@ public class Main {
         }
     }
 
-    static int bin_search(int[] A, int L, int R, int X) {
-
-        int res = R + 1;
-        while (L <= R) {
-            int mid = (L + R) / 2;
-            if (A[mid] <= X)
-                L = mid + 1;
-            else{
-                R = mid - 1;
-                res = R;
-            }
-        }
-        return res;
-    }
-
-    static int upper_bound(int[] A, int L, int R, int X) {
-
-        int res = R + 1;
-        while (L <= R) {
-            int mid = (L + R) / 2;
-            if (A[mid] > X) {
-                res = mid;
-                R = mid - 1;
-            } else {
-                L = mid + 1;
-            }
-        }
-        return res;
-    }
     static void pro() {
 
         Arrays.sort(A, 1, N + 1);
 
-        int sum = Integer.MAX_VALUE;
-        int v1 = 0, v2 = 0;
+        int best_sum = Integer.MAX_VALUE;
+        int v1 = 0, v2 = 0, L = 1, R = N;
 
-        for (int i = 1; i < N; i++) {
-            int res = upper_bound(A, i + 1, N, -A[i]);
-
-            if (i < res - 1 && Math.abs(A[i] + A[res - 1]) < sum) {
-                sum = Math.abs(A[i] + A[res - 1]);
-                v1 = A[i];
-                v2 = A[res - 1];
+        while (L < R) {
+            int sum = Math.abs(A[L] + A[R]);
+            if (best_sum > sum) {
+                best_sum = sum;
+                v1 = A[L];
+                v2 = A[R];
             }
-
-            if (res <= N && Math.abs(A[i] + A[res]) < sum) {
-                sum = Math.abs(A[i] + A[res]);
-                v1 = A[i];
-                v2 = A[res];
+            if (A[L] + A[R] < 0) {
+                L++;
+            }else {
+                R--;
             }
         }
         sb.append(v1).append(' ').append(v2);
