@@ -17,37 +17,29 @@ public class Main {
         }
     }
     static void func(int cur_idx) {
-        int L = 1, R = N;
+        int L = cur_idx + 1, R = N;
         int cur = A[cur_idx];
         while (L < R) {
-            if (L == cur_idx) L++;
-            else if (R == cur_idx) R--;
-            else {
-                long sum = A[L] + A[R] + (long)cur;
-                if (Math.abs(sum) < best_sum){
-                    best_sum = Math.abs(sum);
-                    v1 = cur;
-                    v2 = A[L];
-                    v3 = A[R];
-                }
-                if (sum == 0) return;
-                if (sum > 0) R--;
-                else L++;
+            long sum = (long)A[L] + A[R] + cur;
+            if (Math.abs(sum) < best_sum){
+                best_sum = Math.abs(sum);
+                v1 = cur;
+                v2 = A[L];
+                v3 = A[R];
             }
+            if (A[L] + A[R] > -cur) R--;
+            else L++;
         }
     }
     static void pro() {
 
         Arrays.sort(A, 1, N + 1);
-        int cnt = 0;
-        for (int i = 1; i <= N; i++) {
+        for (int i = 1; i <= N - 2; i++) {
             func(i);
         }
-        int[] arr = new int[] {v1, v2, v3};
-        Arrays.sort(arr);
-        for (int i = 0; i < 3; i ++) {
-            sb.append(arr[i]).append(' ');
-        }
+
+        sb.append(v1).append(' ').append(v2).append(' ').append(v3);
+
         System.out.println(sb);
     }
 
