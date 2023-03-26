@@ -1,76 +1,128 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
 
-class Main {
-    static BufferedReader br;
-    static StringBuffer sb;
+public class Main {
+    static FastReader scan = new FastReader();
+    static StringBuilder sb = new StringBuilder();
 
-    static int[][] Graph;
-    static boolean[] IsVisited;
-    static int N, M;
+    static int N, M, V;
+    static ArrayList<Integer>[] adj;
+    static boolean[] visit;
 
-    public static void main(String[] args) throws IOException {
+    static void input() {
+        N = scan.nextInt();
+        M = scan.nextInt();
+        V = scan.nextInt();
+        adj = new ArrayList[N + 1];
+        visit = new boolean[N + 1];
+        for (int i = 1;i <= N; i++)
+            adj[i] = new ArrayList<>();
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuffer();
-
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-        int v = Integer.parseInt(st.nextToken());
-
-        Graph = new int[N+1][N+1];
-        IsVisited = new boolean[N+1];
-
-        for (int i=0; i<M; i++) {
-            st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-
-            Graph[a][b] = 1;
-            Graph[b][a] = 1;
+        /* TODO */
+        for (int i = 1; i <= M; i++){
+            int s = scan.nextInt();
+            int e = scan.nextInt();
+            adj[s].add(e);
+            adj[e].add(s);
         }
 
-        DFS(v);
+    }
+
+    // x 를 갈 수 있다는 걸 알고 방문한 상태
+    static void dfs(int x) {
+        /* TODO */
+        visit[x] = true;
+        sb.append(x).append(' ');
+        for (int i = 0; i < adj[x].size(); i++) {
+            if (!visit[adj[x].get(i)]) dfs(adj[x].get(i));
+        }
+    }
+
+    // start 에서 시작해서 갈 수 있는 정점들을 모두 탐색하기
+    static void bfs(int start) {
+        Queue<Integer> que = new LinkedList<>();
+        /* TODO */
+        visit[start] = true;
+        que.add(start);
+
+        while (!que.isEmpty()) {
+            int x = que.poll();
+            sb.append(x).append(' ');
+            for (int i = 0; i < adj[x].size(); i++) {
+                if (!visit[adj[x].get(i)]) {
+                    que.add(adj[x].get(i));
+                    visit[adj[x].get(i)] = true;
+                }
+            }
+        }
+    }
+
+    static void pro() {
+        // 모든 x에 대해서 adj[x] 정렬하기
+        /* TODO */
+        for (int i = 1; i <= N; i++)
+            Collections.sort(adj[i]);
+
+        // DFS, BFS 결과 구하기
+        /* TODO */
+        dfs(V);
+        visit = new boolean[N + 1];
         sb.append('\n');
-        for (int i=1; i<IsVisited.length; i++) {
-            IsVisited[i] = false;
-        }
-        BFS(v);
+        bfs(V);
+
         System.out.println(sb);
     }
 
-
-
-    public static void DFS(int start){ // recursive
-
-        sb.append(start).append(' ');
-        IsVisited[start] = true;
-        for (int i=1; i<=N; i++) {
-            if (!IsVisited[i] && Graph[start][i] == 1) {
-                DFS(i);
-            }
-        }
+    public static void main(String[] args) {
+        input();
+        pro();
     }
 
-    public static void BFS(int start){ // queue
 
-        Queue<Integer> queue = new LinkedList<>();
-        queue.add(start);
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
 
-        while (!queue.isEmpty()) {
-            int point = queue.poll();
-            if (!IsVisited[point]) {
-                sb.append(point).append(' ');
-                IsVisited[point] = true;
-                for (int i=1; i<=N; i++) {
-                    if (!IsVisited[i] && Graph[i][point] == 1) {
-                        queue.add(i);
-                    }
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        public FastReader(String s) throws FileNotFoundException {
+            br = new BufferedReader(new FileReader(new File(s)));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
         }
     }
 }
