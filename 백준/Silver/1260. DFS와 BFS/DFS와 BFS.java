@@ -34,8 +34,8 @@ public class Main {
         /* TODO */
         visit[x] = true;
         sb.append(x).append(' ');
-        for (int i = 0; i < adj[x].size(); i++) {
-            if (!visit[adj[x].get(i)]) dfs(adj[x].get(i));
+        for (int y: adj[x]) {
+            if (!visit[y]) dfs(y);
         }
     }
 
@@ -49,10 +49,10 @@ public class Main {
         while (!que.isEmpty()) {
             int x = que.poll();
             sb.append(x).append(' ');
-            for (int i = 0; i < adj[x].size(); i++) {
-                if (!visit[adj[x].get(i)]) {
-                    que.add(adj[x].get(i));
-                    visit[adj[x].get(i)] = true;
+            for (int y: adj[x]) {
+                if (!visit[y]) {
+                    que.add(y);
+                    visit[y] = true;
                 }
             }
         }
@@ -67,7 +67,7 @@ public class Main {
         // DFS, BFS 결과 구하기
         /* TODO */
         dfs(V);
-        visit = new boolean[N + 1];
+        for (int i = 1; i <= N; i++) visit[i] = false;
         sb.append('\n');
         bfs(V);
 
