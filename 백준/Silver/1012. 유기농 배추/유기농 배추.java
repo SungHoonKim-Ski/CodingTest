@@ -1,81 +1,154 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.lang.reflect.Array;
+import java.util.*;
 
-class Main {
-    static BufferedReader br;
-    static StringBuffer sb;
-    public static int[][] cabbageFarm;
-    public static boolean[][] isChecked;
+public class Main {
+    static FastReader scan = new FastReader();
+    static StringBuilder sb = new StringBuilder();
 
-    public static void main(String[] args) throws IOException {
-        br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuffer();
+    static int test_case, arrY, arrX, N;
+    static boolean[][] arr;
 
-        cabbageFarm = new int[51][51];
-        isChecked = new boolean[51][51];
+    static int[] dy = new int[]{0, 1, 0, -1};
+    static int[] dx = new int[]{1, 0, -1, 0};
 
-        int cases = Integer.parseInt(br.readLine());
-        for(int i=0; i<cases; i++){
-            getCabbage();
+    static void input() {
+
+        arrX = scan.nextInt();
+        arrY = scan.nextInt();
+
+        N = scan.nextInt();
+        arr = new boolean[arrY][arrX];
+
+        for (int i = 0; i < N; i++) {
+            int x = scan.nextInt();
+            int y = scan.nextInt();
+            arr[y][x] = true;
         }
-        System.out.println(sb);
     }
 
-    static int farmY;
-    static int farmX;
-    public static void getCabbage() throws IOException{
+    // x 를 갈 수 있다는 걸 알고 방문한 상태
+    static void dfs(int y, int x) {
 
-        String[] input = br.readLine().split(" ");
-        farmY = Integer.parseInt(input[0]);
-        farmX = Integer.parseInt(input[1]);
-        int cabbageCount = Integer.parseInt(input[2]);
-        initArr();
-        bugCount = 0;
-
-        for (int j = 0; j < cabbageCount; j++) {
-            input = br.readLine().split(" ");
-            int tmpY = Integer.parseInt(input[0]);
-            int tmpX = Integer.parseInt(input[1]);
-            cabbageFarm[tmpY][tmpX] = 1;
+        arr[y][x] = false;
+        for (int i = 0; i < 4; i++) {
+            int nextY = y + dy[i];
+            int nextX = x + dx[i];
+            if (nextX == -1 || nextX == arrX || nextY == -1 || nextY == arrY) continue;
+            if (arr[nextY][nextX]) dfs(nextY, nextX);
         }
-        for(int i=0; i<farmY; i++){
-            for(int j=0; j<farmX; j++){
-                BFS(i, j, false);
-            }
-        }
-
-        sb.append(bugCount).append('\n');
     }
+//    static void pro() {
+//
+//        for (int i = 0; i < N; i++) {
+//            for (int j = 0; j < N; j++) {
+//                cur = 0;
+//                dfs(i, j);
+//                if (cur != 0) houseCnt.add(cur);
+//            }
+//        }
+//
+//        Collections.sort(houseCnt);
+//        sb.append(cnt).append('\n');
+//        for (int i: houseCnt) {
+//            sb.append(i).append('\n');
+//        }
+//        System.out.println(sb);
+//    }
 
-    static int bugCount;
+//    static void bfs(int y, int x) {
+//
+//        if (visit[y][x] || arr[y][x] == '0') return;
+//        Queue<int[]> que = new LinkedList<>();
+//        /* TODO */
+//        visit[y][x] = true;
+//        que.add(new int[]{y, x});
+//        int cnt = 1;
+//
+//        while (!que.isEmpty()) {
+//            int[] point = que.poll();
+//            for (int i = 0; i < 4; i++) {
+//                int nextY = point[0] + dy[i];
+//                int nextX = point[1] + dx[i];
+//                if (nextX == -1 || nextX == N || nextY == -1 || nextY == N) continue;
+//                if (arr[nextY][nextX] == '1' && !visit[nextY][nextX]) {
+//                    cnt++;
+//                    que.add(new int[]{nextY, nextX});
+//                    visit[nextY][nextX] = true;
+//                }
+//            }
+//        }
+//
+//        houseCnt.add(cnt);
+//    }
 
-    public static void BFS(int y, int x, boolean isCalled){
-        int[] dy = {0, 1, 0, -1};
-        int[] dx = {1, 0, -1, 0};
+    static void pro() {
 
-        if(isChecked[y][x]) return;
-        isChecked[y][x] = true;
-        if(cabbageFarm[y][x] == 1){
-            if(!isCalled) bugCount++;
-            for(int i=0; i<4; i++){
-                int nextY = y + dy[i];
-                int nextX = x + dx[i];
-                if(nextX < 0 || nextX == farmX || nextY < 0 || nextY == farmY) continue;
-                if(cabbageFarm[nextY][nextX] == 1){
-                    BFS(nextY, nextX, true);
+        int cnt = 0;
+        for (int i = 0; i < arrY; i++) {
+            for (int j = 0; j < arrX; j++) {
+                if (arr[i][j]) {
+                    cnt++;
+                    dfs(i, j);
                 }
             }
         }
+        System.out.println(cnt);
     }
 
-    public static void initArr(){
-        for(int i=0; i<51; i++){
-            for(int j=0; j<51; j++){
-                isChecked[i][j] = false;
-                cabbageFarm[i][j] = 0;
+    public static void main(String[] args) {
+
+        test_case = scan.nextInt();
+        for (int tc = 0; tc < test_case; tc++) {
+            input();
+            pro();
+        }
+    }
+
+
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        public FastReader(String s) throws FileNotFoundException {
+            br = new BufferedReader(new FileReader(new File(s)));
+        }
+
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
+            return st.nextToken();
+        }
+
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
+
+        long nextLong() {
+            return Long.parseLong(next());
+        }
+
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
+
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
         }
     }
 }
