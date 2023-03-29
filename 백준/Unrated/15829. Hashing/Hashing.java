@@ -50,10 +50,9 @@ public class Main {
         // 정답 계산하기
         /* TODO */
         long res = 0;
-        long hash = 1;
+        long hash = 0;
         for (int i = 0; i < N; i++) {
-            res += (arr[i] - 'a' + 1) * hash;
-            hash *= 31;
+            res += (arr[i] - 'a' + 1) * Math.pow(31, hash++);
         }
         System.out.println(res);
     }
