@@ -65,10 +65,10 @@ public class Main {
     }
 
     static void pro() {
-        for (int i = 0; i < zeroList.size(); i++) {
+        for (int i = 0; i < zeroList.size() - 2; i++) {
             int[] a = zeroList.get(i);
             graph[a[0]][a[1]] = 1;
-            for (int j = i + 1; j < zeroList.size(); j++) {
+            for (int j = i + 1; j < zeroList.size() - 1; j++) {
                 int[] b = zeroList.get(j);
                 graph[b[0]][b[1]] = 1;
                 for (int k = j + 1; k < zeroList.size(); k++) {
