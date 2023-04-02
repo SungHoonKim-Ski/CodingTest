@@ -21,10 +21,7 @@ public class Main {
     }
 
     static void bfs(int s) {
-
-        for (int i = 0; i <= MAX_VALUE; i++) {
-            dist[i] = MAX_VALUE;
-        }
+        
 
         Queue<Integer> que = new LinkedList<>();
         que.add(s);
