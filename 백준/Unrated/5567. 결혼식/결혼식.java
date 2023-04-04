@@ -55,14 +55,13 @@ public class Main {
 //    }
 
     static void dfs(int start, int depth) {
-
-        if (depth > 2) return;
         
         if (!visit[start]) {
             visit[start] = true;
             cnt++;
         }
-
+        if (depth == 2) return;
+        
         for (int end: list[start]) {
             dfs(end, depth + 1);
         }
