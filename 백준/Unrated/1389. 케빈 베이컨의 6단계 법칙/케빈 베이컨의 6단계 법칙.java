@@ -1,90 +1,72 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.*;
-
 
 public class Main {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
-    static int M, N, cnt = -1;
-    static int MAX_VALUE = 101;
-    static boolean[][] graph;
-    static int[][] dist;
-
-    static HashSet<Integer> hashSet;
+    static int N, M;
+    static ArrayList<Integer>[] adj;
+    static int[] dist;
 
     static void input() {
-
         N = scan.nextInt();
         M = scan.nextInt();
-        graph = new boolean[MAX_VALUE][MAX_VALUE];
-        dist = new int[MAX_VALUE][MAX_VALUE];
-
-        hashSet = new HashSet<>();
-
-        for (int i = 0; i < M; i++) {
-            int s = scan.nextInt();
-            int e = scan.nextInt();
-            graph[s][e] = true;
-            graph[e][s] = true;
-            hashSet.add(s);
-            hashSet.add(e);
+        adj = new ArrayList[N + 1];
+        for (int i = 1;i <= N; i++)
+            adj[i] = new ArrayList<>();
+        for (int i = 1; i <= M; i++) {
+            int x = scan.nextInt(), y = scan.nextInt();
+            adj[x].add(y);
+            adj[y].add(x);
         }
     }
 
-    static void bfs(int start) {
-
+    // start 라는 정점의 케빈 베이컨의 수를 계산해주는 함수
+    static int bfs(int start) {
+        int ret = 0;
         Queue<Integer> que = new LinkedList<>();
-        dist[start][start] = 1;
-        que.add(start);
+        for (int i = 1; i <= N; i++) dist[i] = -1;
 
-        while (!que.isEmpty()) {
-            int cur = que.poll();
-            for (int i: hashSet) {
-                if (graph[cur][i] && (dist[start][i] == 0)) {
-                    que.add(i);
-                    dist[start][i] = dist[start][cur] + 1;
-                }
+        // start는 방문 가능한 점이므로 que에 넣어준다.
+        que.add(start);
+        dist[start] = 0;  // start를 갈 수 있다고 표시하기 (중요!!!)
+
+        while (!que.isEmpty()) {  // 더 확인할 점이 없다면 정지
+            int x = que.poll();
+            ret += dist[x];
+
+            for (int y: adj[x]){
+                if (dist[y] != -1) continue;  // x 에서 y 를 갈 수는 있지만, 이미 탐색한 점이면 무시
+                // y를 갈 수 있으니까 que에 추가하고, visit 처리 하기!
+                que.add(y);
+                dist[y] = dist[x] + 1;
             }
         }
+        return ret;
     }
-
 
     static void pro() {
-
-        for (int i: hashSet){
-            bfs(i);
-        }
-
-        int minVal = Integer.MAX_VALUE;
-        int minIdx = 101;
-
-        for (int i: hashSet) {
-            int sum = 0;
-            for (int j: hashSet) {
-                sum += dist[i][j];
-            }
-            if (sum == 1) continue;
-            if (sum < minVal) {
+        dist = new int[N + 1];
+        int minV = bfs(1), minIdx = 1;
+        for (int i = 2; i <= N; i++) {
+            int v = bfs(i);
+            if (minV > v){
+                minV = v;
                 minIdx = i;
-                minVal = sum;
             }
         }
         System.out.println(minIdx);
     }
 
     public static void main(String[] args) {
-
         input();
         pro();
     }
 
 
     static class FastReader {
-        // BufferedReader의 빠른 속도,
-        // + Scanner의 타입별 입력값을 받는 기능을 혼합
-        // (자바 내부에 구현된 Scanner는 속도가 느림)
-        // 다른분의 코드를 참고한 코드
         BufferedReader br;
         StringTokenizer st;
 
