@@ -61,12 +61,13 @@ public class Main {
             sb.append("A forest of ").append(ans).append(" trees.\n");
         }
     }
-
+    
     public static void main(String[] args) {
-        for (int tt = 1;;tt++){
+
+        for (int i = 1; ; i++){
             input();
             if (n == 0 && m == 0) break;
-            pro(tt);
+            pro(i);
         }
         System.out.print(sb);
     }
