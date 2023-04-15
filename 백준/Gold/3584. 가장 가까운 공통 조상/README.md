@@ -18,7 +18,7 @@
 	<li>두 노드의 가장 가까운 공통 조상은, 두 노드를 모두 자손으로 가지면서 깊이가 가장 깊은(즉 두 노드에 가장 가까운) 노드를 말합니다.</li>
 </ul>
 
-<p style="text-align:center"><img alt="nca.png" src="" style="height:278px; width:304px"></p>
+<p style="text-align:center"><img alt="nca.png" src="https://upload.acmicpc.net/4f2eae58-31bf-445f-a7a3-625505e7102c/-/preview/" style="height:278px; width:304px"></p>
 
 <p>예를 들어  15와 11를 모두 자손으로 갖는 노드는 4와 8이 있지만, 그 중 깊이가 가장 깊은(15와 11에 가장 가까운) 노드는 4 이므로 가장 가까운 공통 조상은 4가 됩니다.</p>
 
