@@ -13,7 +13,11 @@ public class Main {
         String input = "";
         a = new ArrayList<>();
         while ((input = br.readLine()) != null){
-            a.add(Integer.parseInt(input));
+            try {
+                a.add(Integer.parseInt(input));
+            }catch (Exception e) {
+                break;
+            }
         }
     }
 
@@ -27,13 +31,10 @@ public class Main {
                 break;
             }
         }
-
-        // 후위 순회
         traverse(l + 1, mid);
         traverse(mid + 1, r);
         sb.append(a.get(l)).append('\n');
     }
-
     static void pro() {
         traverse(0, a.size() - 1);
         System.out.print(sb);
