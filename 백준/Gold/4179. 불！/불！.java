@@ -46,23 +46,16 @@ public class Main {
 
     static int bfs() {
 
+        if (start[0] == 0 || start[1] == 0 || start[0] == (r - 1) || start[1] == (c - 1))
+            return 1;
         Queue<int[]> que = new LinkedList<>();
 
-        for (int[] f: fireArr) {
-            que.add(f);
-            visit[f[0]][f[1]] = true;
-        }
+        que.addAll(fireArr);
         que.add(start);
-        visit[start[0]][start[1]] = true;
 
         while (!que.isEmpty()) {
 
             int[] cur = que.poll();
-            if (cur[2] != -1) {
-                if (cur[0] == 0 || cur[1] == 0 || cur[0] == (r - 1) || cur[1] == (c - 1)) {
-                    return cur[2] + 1;
-                }
-            }
             // cur[0] = y
             // cur[1] = x
             // cur[2] = J : moveCnt, fire : -1
@@ -76,6 +69,9 @@ public class Main {
                 visit[ny][nx] = true;
 
                 if (cur[2] != -1) {
+                    if (ny == 0 || nx == 0 || ny == (r - 1) || nx == (c - 1)) {
+                        return cur[2] + 2; // move + 1, escape + 1
+                    }
                     que.add(new int[] {ny, nx, cur[2] + 1});
                 } else {
 
