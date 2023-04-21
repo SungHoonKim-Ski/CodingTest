@@ -20,17 +20,19 @@ public class Main {
         fireArr = new ArrayList<>();
 
         visit = new boolean[r][c];
-        Graph = new char[r][c];
         for (int i = 0; i < r; i++) {
             char[] inputArr = scan.nextLine().toCharArray();;
             for (int j = 0; j < c; j++) {
-                Graph[i][j] = inputArr[j];
+                if (inputArr[j] == '.') continue;
+                visit[i][j] = true;
                 if (inputArr[j] == 'F') {
-                    visit[i][j] = true;
                     fireArr.add(new int[] {i, j, -1});
                 } else if (inputArr[j] == 'J') {
                     start = new int[] {i, j, 0};
-                } else if (inputArr[j] == '#') visit[i][j] = true;
+                }
+//                else if (inputArr[j] == '#') {
+//                    visit[i][j] = true;
+//                }
             }
         }
     }
@@ -44,22 +46,26 @@ public class Main {
 
     static int bfs() {
 
-        int res = -1;
-
         Queue<int[]> que = new LinkedList<>();
-        que.addAll(fireArr);
+
+        for (int[] f: fireArr) {
+            que.add(f);
+            visit[f[0]][f[1]] = true;
+        }
         que.add(start);
         visit[start[0]][start[1]] = true;
 
         while (!que.isEmpty()) {
 
             int[] cur = que.poll();
-
             if (cur[2] != -1) {
                 if (cur[0] == 0 || cur[1] == 0 || cur[0] == (r - 1) || cur[1] == (c - 1)) {
                     return cur[2] + 1;
                 }
             }
+            // cur[0] = y
+            // cur[1] = x
+            // cur[2] = J : moveCnt, fire : -1
 
             for (int i = 0; i < 4; i++) {
                 int ny = cur[0] + dy[i];
@@ -72,11 +78,12 @@ public class Main {
                 if (cur[2] != -1) {
                     que.add(new int[] {ny, nx, cur[2] + 1});
                 } else {
+
                     que.add(new int[] {ny, nx, -1});
                 }
             }
         }
-        return res;
+        return -1;
     }
 
     public static void main(String[] args) throws IOException {
