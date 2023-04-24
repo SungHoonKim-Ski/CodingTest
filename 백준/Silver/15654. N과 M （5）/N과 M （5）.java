@@ -3,8 +3,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.StringTokenizer;
+
 
 public class Main {
 
@@ -15,16 +15,19 @@ public class Main {
     static int[] prev_val;
     public static void main(String[] args) throws IOException {
 
-        Scanner sc = new Scanner(new InputStreamReader(System.in));
-        n = sc.nextInt();
-        m = sc.nextInt();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         sb = new StringBuffer();
         hashSet = new HashSet<>();
+        
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
         input_val = new int[n];
         prev_val = new int[m];
+        st = new StringTokenizer(br.readLine());
         for (int i = 0; i < n; i++) {
-            input_val[i] = sc.nextInt();
+            input_val[i] = Integer.parseInt(st.nextToken());
         }
         Arrays.sort(input_val);
         recur_func(0);
