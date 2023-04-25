@@ -20,9 +20,7 @@ public class Main {
     static void pro() {
 
         int cnt = 0;
-        for (int i = 1; i <= Math.sqrt(n); i++) {
-            cnt++;
-        }
+        for (int i = 1; i * i <= n; i++) cnt++;
         System.out.println(cnt);
     }
 
