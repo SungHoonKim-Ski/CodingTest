@@ -1,15 +1,14 @@
 import java.io.*;
-import java.util.*;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
 public class Main {
     static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
 
     static int N, M;
-    static int[] indeg;
     static int[] input_val;
     static int[] prev_val;
-    static ArrayList<Integer>[] adj;
 
     static void input() {
 
@@ -57,7 +56,7 @@ public class Main {
         public FastReader(String s) throws FileNotFoundException {
             br = new BufferedReader(new FileReader(new File(s)));
         }
-
+        
         String next() {
             while (st == null || !st.hasMoreElements()) {
                 try {
