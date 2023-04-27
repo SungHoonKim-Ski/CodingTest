@@ -42,12 +42,7 @@ public class Main {
         	int x = queue.poll();
         	for (int y : adj[x]) {
         		indeg[y]--;
-        		if(T_done[y] == 0) {
-        			T_done[y] = T_done[x] + T[y];  
-        		}else {
-        			T_done[y] = Math.max(T_done[y], T_done[x] + T[y]); 
-        		}
-        		
+    			T_done[y] = Math.max(T_done[y], T_done[x] + T[y]); 
         		if (indeg[y]== 0) queue.add(y);
         	}
         }
