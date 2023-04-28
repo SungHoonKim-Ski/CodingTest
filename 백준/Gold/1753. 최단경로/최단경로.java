@@ -16,27 +16,26 @@ public class Main {
     }
 
     static class Info {
-        public int idx;
-        public long dist;
+        public int idx, dist;
 
         public Info() {
         }
 
-        public Info(int _idx, long _dist) {
+        public Info(int _idx, int _dist) {
             this.idx = _idx;
             this.dist = _dist;
         }
     }
 
     static int N, M, start, end;
-    static long[] dist;
+    static int[] dist;
     static ArrayList<Edge>[] edges;
 
     static void input() {
         N = scan.nextInt();
         M = scan.nextInt();
         start = scan.nextInt();
-        dist = new long[N + 1];
+        dist = new int[N + 1];
         edges = new ArrayList[N + 1];
         for (int i = 1; i <= N; i++) edges[i] = new ArrayList<Edge>();
         for (int i = 1; i <= M; i++) {
@@ -49,7 +48,7 @@ public class Main {
 
     static void dijkstra(int start) {
 
-    	for (int i = 1; i <= N; i++) dist[i] = Long.MAX_VALUE; 
+    	for (int i = 1; i <= N; i++) dist[i] = Integer.MAX_VALUE; 
     	PriorityQueue<Info> pq = new PriorityQueue<>(Comparator.comparingLong(o -> o.dist));
     	// 다른 방법) PriorityQueue<Info> pq = new PriorityQueue<>((o1, o2) -> o1.dist - o2.dist);
     	pq.add(new Info(start, 0));
@@ -75,7 +74,7 @@ public class Main {
     static void pro() {
         dijkstra(start);
         for (int i = 1; i <= N; i++) {
-        	if (dist[i] == Long.MAX_VALUE) {
+        	if (dist[i] == Integer.MAX_VALUE) {
         		sb.append("INF").append('\n');
         		continue;
         	}
