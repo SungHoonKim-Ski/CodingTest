@@ -32,65 +32,6 @@ public class Solution {
 		sb.append(String.format("#%d %d %d\n", tc, min, max));
 	}
 	
-	public static int findMin(int biggerThan, int startIdx) {
-		
-		if (startIdx == charN.length - 1) return Integer.parseInt(String.valueOf(charN));
-		int min = 9, minIdx = -1;
-		
-		for (int i = charN.length - 1; i >= startIdx ; i--) {
-			int val = charN[i] - '0';
-			if (val < biggerThan) continue;
-			if (min > val) {
-				min = val;
-				minIdx = i;
-			}
-		}
-		if (minIdx == -1) return Integer.parseInt(String.valueOf(charN));
-		if (minIdx == startIdx) return findMin(min, startIdx + 1);
-		
-		int swapIdx = -1;
-		for (int i = startIdx; i < charN.length; i++) {
-			int val = charN[i] - '0';
-			if (val == min) continue;
-			else {
-				swapIdx = i;
-				break;
-			}
-		}
-		if (swapIdx == -1) return Integer.parseInt(String.valueOf(charN));
-		return swap(minIdx, swapIdx);
-	}
-	
-	public static int findMax(int smallerThan, int startIdx) {
-		
-		if (startIdx == charN.length - 1) return Integer.parseInt(String.valueOf(charN));
-		int max = -1, maxIdx = -1;
-		
-		for (int i = charN.length - 1; i >= startIdx ; i--) {
-			int val = charN[i] - '0';
-			if (val >= smallerThan) continue;
-			if (max < val) {
-				max = val;
-				maxIdx = i;
-			}
-		}
-		if (maxIdx == -1) return Integer.parseInt(String.valueOf(charN));
-		if (maxIdx == startIdx) return findMax(max, startIdx + 1);
-		
-		int swapIdx = -1;
-		for (int i = startIdx; i < charN.length; i++) {
-			int val = charN[i] - '0';
-			if (val == max) continue;
-			else {
-				swapIdx = i;
-				break;
-			}
-		}
-		if (swapIdx == -1) return Integer.parseInt(String.valueOf(charN));
-		
-		return swap(maxIdx, swapIdx);
-	}
-	
 	public static int swap(int idx1, int idx2) {
 	    
 		char[] clone = charN.clone();
