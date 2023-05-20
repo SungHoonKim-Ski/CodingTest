@@ -41,7 +41,7 @@ public class Solution {
 			inCards[cnt++] = i;
 		}
 		
-		Win = Draw = 0;
+		Win = 0;
 		dfs(0, 0, 0);
 		sb.append(String.format("#%d %d %d\n", tc, Win, wholeGameCnt - Draw - Win));
 	}
@@ -50,7 +50,6 @@ public class Solution {
 
 		if (depth == 9) {
 			if (queScore > inScore) Win++;
-			else if (queScore == inScore) Draw++;
 			return;
 		}
 		
