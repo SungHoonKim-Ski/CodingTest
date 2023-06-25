@@ -10,34 +10,17 @@ public class Main
     static StringBuffer sb = new StringBuffer();
     static StringTokenizer st;
 
-//    static int[][] Origin;
-//    static int[][][] dpMatrix;
-    static int N, P;
+    static int N;
 
 
     public static void input() throws Exception
     {
 
-//        Origin = new int[][]{{1, 1}, {0, 1}};
-//
-//        int initNum = 1, i = N;
-//        dpMatrix = new int[61][2][2]; // 2^60 = max
-//        dpMatrix[0] = new int[][]{{1, 1}, {0, 1}};
         N = Integer.parseInt(br.readLine());
     }
 
     static void pro() throws Exception
     {
-//        boolean isEvenNum = true;
-//
-//        if (N % 2 == 1) {
-//            isEvenNum = false;
-//        }
-//
-//
-//        int i = 1;
-//        while (i )
-
         HashMap<Integer, Integer> hashMap = new HashMap<>();
         int cnt = 0;
         for (int i = 0; i < N; i++) {
@@ -56,14 +39,9 @@ public class Main
         System.out.println(cnt);
     }
 
-    static void mulMatrix(int[][] origin, int[][] mulMatrix) {
-
-    }
-
     public static void main(String[] args) throws Exception
     {
         input();
         pro();
-//        System.out.println(sb);
     }
 }
