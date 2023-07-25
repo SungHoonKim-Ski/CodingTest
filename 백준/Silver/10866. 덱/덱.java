@@ -1,68 +1,77 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
-
 
 public class Main {
 
-    //    private static Scanner sc = new Scanner(System.in);
+    static StringBuilder sb = new StringBuilder();
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int N;
+    static int[] DequeArr;
 
-    public static void main(String args[]) throws IOException {
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
+    static void input() throws IOException
+    {
+        N = Integer.parseInt(br.readLine());
+        DequeArr = new int[N * 2];
+    }
 
-        int count = Integer.parseInt(br.readLine());
-        Deque queue = new LinkedList();
-        while (count > 0){
-            String[] inputSplit = br.readLine().split(" ");
-            if(inputSplit[0].equals("push_front")){
-                queue.addFirst(Integer.parseInt(inputSplit[1]));
-            }else if(inputSplit[0].equals("push_back")){
-                queue.addLast(Integer.parseInt(inputSplit[1]));
-            }else if(inputSplit[0].equals("pop_front")){
-                if(queue.size() > 0){
-                    sb.append(queue.pollFirst());
-                }else{
-                    sb.append("-1");
-                }
-                sb.append("\n");
-            }else if(inputSplit[0].equals("pop_back")){
-                if(queue.size() > 0){
-                    sb.append(queue.pollLast());
-                }else{
-                    sb.append("-1");
-                }
-                sb.append("\n");
-            }else if(inputSplit[0].equals("size")){
-                sb.append(queue.size());
-                sb.append("\n");
-            }else if(inputSplit[0].equals("empty")){
-                if(queue.size() > 0){
-                    sb.append("0");
-                }else{
-                    sb.append("1");
-                }
-                sb.append("\n");
-            }else if(inputSplit[0].equals("front")){
-                if(queue.size() > 0){
-                    sb.append(queue.peekFirst());
-                }else{
-                    sb.append("-1");
-                }
-                sb.append("\n");
-            }else if(inputSplit[0].equals("back")){
-                if(queue.size() > 0){
-                    sb.append(queue.peekLast());
-                }else{
-                    sb.append("-1");
-                }
-                sb.append("\n");
+    static void pro() throws IOException
+    {
+        int front = N, back = N;
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
+
+        while (N-- > 0) {
+
+            st = new StringTokenizer(br.readLine());
+            String cmd = st.nextToken();
+
+            switch (cmd) {
+                case "push_front": // front = DequeArr[--front]
+                    DequeArr[--front] = Integer.parseInt(st.nextToken());
+                    break;
+                case "push_back": // back = DequeArr[back++]
+                    DequeArr[back++] = Integer.parseInt(st.nextToken());
+                    break;
+                case "pop_front":
+                    if (front == back) sb.append(-1);
+                    else sb.append(DequeArr[front++]);
+                    sb.append('\n');
+                    break;
+                case "pop_back":
+                    if (front == back) sb.append(-1);
+                    else sb.append(DequeArr[--back]);
+                    sb.append('\n');
+                    break;
+                case "size":
+                    sb.append(back - front).append('\n');
+                    break;
+                case "empty":
+                    if (front == back) sb.append(1);
+                    else sb.append(0);
+                    sb.append('\n');
+                    break;
+                case "front":
+                    if (front != back) sb.append(DequeArr[front]);
+                    else sb.append(-1);
+                    sb.append('\n');
+                    break;
+                case "back":
+                    if (front != back) sb.append(DequeArr[back - 1]);
+                    else sb.append(-1);
+                    sb.append('\n');
+                    break;
+                default:
+                    System.out.println("error");
             }
-            count--;
         }
-        System.out.println(sb.toString().trim());;
+        System.out.println(sb);
+    }
+
+    public static void main(String[] args) throws Exception{
+        input();
+        pro();
+
     }
 
 }
