@@ -6,16 +6,19 @@ public class Main {
     static StringBuilder sb = new StringBuilder();
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int N;
+    static int[] StackArr;
+
 
     static void input() throws IOException
     {
         N = Integer.parseInt(br.readLine());
+        StackArr = new int[N];
     }
 
     static void pro() throws IOException
     {
+        int top = 0, size = 0;
         StringTokenizer st;
-        Deque<Integer> queue = new LinkedList<>();
         StringBuilder sb = new StringBuilder();
 
         while (N-- > 0) {
@@ -25,30 +28,37 @@ public class Main {
 
             switch (cmd) {
                 case "push":
-                    queue.add(Integer.parseInt(st.nextToken()));
+                    StackArr[top++] = Integer.parseInt(st.nextToken());
+                    size++;
                     break;
                 case "pop":
-                    if (queue.isEmpty()) sb.append(-1);
-                    else sb.append(queue.poll());
+                    if (size == 0) sb.append(-1);
+                    else {
+                        sb.append(StackArr[top - size]);
+                        size--;
+                    }
                     sb.append('\n');
                     break;
                 case "size":
-                    sb.append(queue.size()).append('\n');
+                    sb.append(size).append('\n');
                     break;
                 case "empty":
-                    if (queue.isEmpty()) sb.append(1);
+                    if (size == 0) sb.append(1);
                     else sb.append(0);
                     sb.append('\n');
                     break;
                 case "front":
-                    if (queue.isEmpty()) sb.append(-1);
-                    else sb.append(queue.peekFirst());
+                    if (size != 0) sb.append(StackArr[top - size]);
+                    else sb.append(-1);
                     sb.append('\n');
                     break;
                 case "back":
-                    if (queue.isEmpty()) sb.append(-1);
-                    else sb.append(queue.peekLast());
+                    if (size != 0) sb.append(StackArr[top - 1]);
+                    else sb.append(-1);
                     sb.append('\n');
+                    break;
+                default:
+                    System.out.println("error");
             }
         }
         System.out.println(sb);
