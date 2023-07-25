@@ -1,81 +1,72 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
-
 
 public class Main {
 
-    //    private static Scanner sc = new Scanner(System.in);
+    static StringBuilder sb = new StringBuilder();
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static int N, Top, Size;
+    static int[] StackArr;
 
-    public static void main(String args[]) throws IOException {
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuffer sb = new StringBuffer();
-
-        int count = Integer.parseInt(br.readLine());
-        Stack stack = new Stack();
-        while (count > 0){
-            String[] inputSplit = br.readLine().split(" ");
-            if(inputSplit[0].equals("push")){
-                stack.push(Integer.parseInt(inputSplit[1]));
-            }else if(inputSplit[0].equals("pop")){
-                sb.append(stack.pop());
-                sb.append("\n");
-            }else if(inputSplit[0].equals("size")){
-                sb.append(stack.size());
-                sb.append("\n");
-            }else if(inputSplit[0].equals("empty")){
-                sb.append(stack.empty());
-                sb.append("\n");
-            }else if(inputSplit[0].equals("top")){
-                sb.append(stack.top());
-                sb.append("\n");
-            }
-            count--;
-        }
-        System.out.println(sb.toString().trim());;
+    static void input() throws IOException
+    {
+        N = Integer.parseInt(br.readLine());
+        StackArr = new int[N];
+        Size = 0;
     }
 
-    static public class Stack{
-        int size = 0;
-        int[] stack = new int[10001];
-        int top;
+    static void pro() throws IOException
+    {
+        StringTokenizer st;
+        StringBuilder sb = new StringBuilder();
 
-        public void push(int input){
-            size++;
-            stack[size] = input;
-            top = input;
-        }
+        while (N-- > 0) {
 
-        public int top(){
-            if(size == 0){
-                top = -1;
+            st = new StringTokenizer(br.readLine());
+            String cmd = st.nextToken();
+
+            switch (cmd) {
+                case "push":
+                    StackArr[Size++] = Integer.parseInt(st.nextToken());
+                    break;
+                case "pop":
+                    if (Size == 0) sb.append(-1);
+                    else sb.append(StackArr[--Size]);
+                    sb.append('\n');
+                    break;
+                case "size":
+                    sb.append(Size).append('\n');
+                    break;
+                case "empty":
+                    if (Size == 0) sb.append(1);
+                    else sb.append(0);
+                    sb.append('\n');
+                    break;
+                case "top":
+                    if (Size != 0) sb.append(StackArr[Size - 1]);
+                    else sb.append(-1);
+                    sb.append('\n');
+                    break;
+                default:
+                    System.out.println("error");
+//                case "front":
+//                    if (queue.isEmpty()) sb.append(-1);
+//                    else sb.append(queue.peekFirst());
+//                    sb.append('\n');
+//                    break;
+//                case "back":
+//                    if (queue.isEmpty()) sb.append(-1);
+//                    else sb.append(queue.peekLast());
+//                    sb.append('\n');
             }
-            return top;
         }
+        System.out.println(sb);
+    }
 
-        public int pop(){
-            int res = -1;
-            if(size > 0){
-                res = stack[size];
-                size--;
-                top = stack[size];
-            }
-            return res;
-        }
-
-        public int size(){
-            return size;
-        }
-
-        public int empty(){
-            if(size == 0){
-                return 1;
-            }else{
-                return 0;
-            }
-        }
+    public static void main(String[] args) throws Exception{
+        input();
+        pro();
 
     }
 
