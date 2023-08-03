@@ -1,78 +1,74 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    static StringBuffer sb;
+    static StringBuilder sb = new StringBuilder();
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
-    public static void main(String args[])throws IOException{
+    static StringTokenizer st;
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuffer();
+    static int N;
 
-        int holeCount = Integer.parseInt(br.readLine());
-        for(int i=0; i<holeCount; i++){
-            char[] revOrDel = br.readLine().toCharArray();
-            int count = Integer.parseInt(br.readLine());
-            String[] inputIntArray = br.readLine().split(",");
-            inputIntArray[0] = inputIntArray[0].replace("[", "");
-            inputIntArray[inputIntArray.length-1] = inputIntArray[inputIntArray.length-1].replace("]", "");
 
-            Deque<Integer> intArrDeque = new LinkedList();
-            for(int j=0; j<count; j++){
-                intArrDeque.addLast(Integer.parseInt(inputIntArray[j]));
-            }
+    static char[] CmdCharArr;
+    static Deque<Integer> ACDeque;
 
-            reverseORExcept(intArrDeque, revOrDel);
+    static void input() throws IOException
+    {
+        CmdCharArr = br.readLine().toCharArray();
+
+        N = Integer.parseInt(br.readLine());
+        ACDeque = new ArrayDeque<>();
+        StringTokenizer st = new StringTokenizer(br.readLine(), ",");
+
+        if (N == 0) return;
+        if (st.countTokens() == 1) {
+            String tmpStr = st.nextToken().replace("[", "");
+            tmpStr = tmpStr.replace("]", "");
+            ACDeque.add(Integer.parseInt(tmpStr));
+        } else {
+            ACDeque.add(Integer.parseInt(st.nextToken().replace("[","")));
+            for (int i = 1; i < N - 1; i++) ACDeque.add(Integer.parseInt(st.nextToken()));
+            ACDeque.add(Integer.parseInt(st.nextToken().replace("]","")));
         }
-        sb.setLength(sb.length()-1);
+    }
+
+    static void pro() throws IOException
+    {
+        boolean isReversed = false;
+        for (int i = 0; i < CmdCharArr.length; i++) {
+            if (CmdCharArr[i] == 'R') isReversed = !isReversed;
+            else { // D
+                if (ACDeque.isEmpty()) {
+                    sb.append("error").append('\n');
+                    return;
+                }
+                if (!isReversed) {
+                    ACDeque.pollFirst();
+                } else {
+                    ACDeque.pollLast();
+                }
+            }
+        }
+        sb.append('[');
+        if (!ACDeque.isEmpty()) {
+            while (!ACDeque.isEmpty()) {
+                if (!isReversed) sb.append(ACDeque.pollFirst()).append(',');
+                else sb.append(ACDeque.pollLast()).append(',');
+            }
+            sb.setLength(sb.length() - 1);
+        }
+        sb.append(']').append('\n');
+
+    }
+    public static void main(String[] args) throws Exception{
+        int T = Integer.parseInt(br.readLine());
+        while (T-- > 0) {
+            input();
+            pro();
+        }
         System.out.println(sb);
-        return;
     }
 
-    public static void reverseORExcept(Deque<Integer> intArrDeque, char[] revORDel){
-
-        boolean isASC = true;
-        for(int i=0; i<revORDel.length; i++){
-            if(revORDel[i] == 'R'){ // Reverse
-                isASC = !isASC;
-            }else{ // Del
-                if(intArrDeque.size() == 0){
-                    intArrDeque = null;
-                    break;
-                }
-                if(isASC){
-                    intArrDeque.removeFirst();
-                }else{
-                    intArrDeque.removeLast();
-                }
-            }
-        }
-        printArray(intArrDeque, isASC);
-    }
-
-    public static void printArray(Deque<Integer> intArrDeque, boolean isASC){
-        if(intArrDeque == null){
-            sb.append("error");
-        }else{
-            sb.append("[");
-            if(intArrDeque.size() > 0){
-                if(isASC){
-                    while (intArrDeque.size() > 0){
-                        sb.append(intArrDeque.pollFirst() + ",");
-                    }
-                }else{
-                    while (intArrDeque.size() > 0){
-                        sb.append(intArrDeque.pollLast() + ",");
-                    }
-                }
-                sb.setLength(sb.length()-1);
-            }
-            sb.append("]");
-        }
-        sb.append("\n");
-    }
 }
