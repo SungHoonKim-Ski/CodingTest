@@ -44,10 +44,13 @@ public class Main {
     }
 
     static void mix() { // 가능한 모든 조합의 수
+
         for (int i = 0; i < InputList.size() - 1; i++) {
             for (int j = i + 1; j < InputList.size(); j++) {
-                MixSet.add(InputList.get(i).charAt(0) + "" + InputList.get(j).charAt(1));
-                MixSet.add(InputList.get(j).charAt(0) + "" + InputList.get(i).charAt(1));
+                String a = InputList.get(i);
+                String b = InputList.get(j);
+                MixSet.add(a.charAt(0) + "" + b.charAt(1));
+                MixSet.add(b.charAt(0) + "" + a.charAt(1));
             }
         }
     }
@@ -58,8 +61,8 @@ public class Main {
         for (String s : MixSet) {
             char front = s.charAt(0);
             char back = s.charAt(1);
-            if (front == back) printType.add(front);
-            else if (front > back) printType.add(front);
+            if (front > back) printType.add(front);
+            else if (front < back) printType.add(back);
             else printType.add(back);
         }
         LinkedList<Character> sortList = new LinkedList<>(printType);
