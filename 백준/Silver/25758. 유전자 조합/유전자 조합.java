@@ -10,7 +10,7 @@ public class Main {
 
     static int N;
 
-    static ArrayList<String> InputList;
+    static ArrayList<String> InputList, SameList;
 
     static HashSet<String> MixSet;
 
@@ -27,7 +27,7 @@ public class Main {
             if (!inputSet.add(s)) sameSet.add(s);
         }
         InputList = new ArrayList<>(inputSet);
-        InputList.addAll(sameSet);
+        SameList = new ArrayList<>(sameSet);
         MixSet = new HashSet<>();
     }
 
@@ -53,6 +53,12 @@ public class Main {
                 MixSet.add(b.charAt(0) + "" + a.charAt(1));
             }
         }
+        for (int i = 0; i < SameList.size(); i++) {
+            String s = InputList.get(i);
+            MixSet.add(s.charAt(0) + "" + s.charAt(1));
+            MixSet.add(s.charAt(1) + "" + s.charAt(0));
+        }
+
     }
 
     static LinkedList<Character> calPrintType() {
