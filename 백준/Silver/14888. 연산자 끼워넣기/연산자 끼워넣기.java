@@ -1,58 +1,74 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
 
-    static int[] arrA;
-    static int[] operatorArr, curUseOperator;
-    static int operatorCnt = 0, maxNum = -1000000001, minNum = 1000000001;
-    static StringBuffer sb;
-    public static void main(String[] args) {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuffer sb = new StringBuffer();
+    static StringTokenizer st;
+    static int n, maxNum, minNum;
+    static int[] operatorArr = new int[4];
+    static int[] inputArr;
 
-        Scanner sc = new Scanner(new InputStreamReader(System.in));
-        int arrCnt = sc.nextInt();
-        arrA = new int[arrCnt];
-        operatorArr = new int[4];
-        curUseOperator = new int[4];
-        for (int i = 0; i < arrCnt; i++) arrA[i] = sc.nextInt();
-        for (int i = 0; i < 4; i++) {
-            operatorArr[i] = sc.nextInt();
-            operatorCnt += operatorArr[i];
-        }
-        recur_func(1, arrA[0]);
-        System.out.println(maxNum);
-        System.out.println(minNum);
+    static void input() throws IOException{
+
+        maxNum = Integer.MIN_VALUE;
+        minNum = Integer.MAX_VALUE;
+
+        n = Integer.parseInt(br.readLine());
+        inputArr = new int[n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) inputArr[i] = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < 4; i++) operatorArr[i] = Integer.parseInt(st.nextToken());
     }
-    
-    static void recur_func(int depth, int num) {
+    static void pro() {
 
-        if (depth == operatorCnt + 1) {
-            maxNum = Math.max(maxNum, num);
-            minNum = Math.min(minNum, num);
+        dfs(1, inputArr[0]); // 초기값 설정 필요
+        sb.append(maxNum).append('\n').append(minNum);
+        System.out.println(sb);
+    }
+
+    static void dfs(int depth, int calNum) {
+
+        // startIdx는 동일한 연산 반복을 피하기 위해 사용
+
+        if (depth == n) {
+            maxNum = Math.max(maxNum, calNum);
+            minNum = Math.min(minNum, calNum);
             return;
         }
 
-        for (int j = 0; j < 4; j++) {
-            if (operatorArr[j] > curUseOperator[j]) {
-                curUseOperator[j]++;
-                switch (j) {
-                    case 0:
-                        recur_func(depth + 1, num + arrA[depth]);
-                        break;
-                    case 1:
-                        recur_func(depth + 1, num - arrA[depth]);
-                        break;
-                    case 2:
-                        recur_func(depth + 1, num * arrA[depth]);
-                        break;
-                    case 3:
-                        recur_func(depth + 1, num / arrA[depth]);
-                }
-                curUseOperator[j]--;
+        for (int j = 0; j < operatorArr.length; j++) {
+            if (operatorArr[j] == 0) continue;
+            operatorArr[j]--;
+            switch (j) {
+                case 0:
+                    dfs(depth + 1, calNum + inputArr[depth]);
+                    break;
+                case 1:
+                    dfs(depth + 1, calNum - inputArr[depth]);
+                    break;
+                case 2:
+                    dfs(depth + 1, calNum * inputArr[depth]);
+                    break;
+                case 3:
+                    dfs(depth + 1, calNum / inputArr[depth]);
+                    break;
+                default:
+                    break;
             }
+            operatorArr[j]++;
         }
+
+    }
+
+    public static void main(String[] args) throws IOException{
+
+        input();
+        pro();
     }
 
 }
