@@ -1,3 +1,4 @@
+
 import java.util.*;
 import java.io.*;
 
@@ -130,10 +131,11 @@ public class Main {
 				int nx = cur.x + dx[i];
 				if (isNotPossible(ny, nx)) continue;
 				if (isChecked[ny][nx]) continue;
-				Pos nPos = new Pos(ny, nx, cur.dist + 1);	
+				Pos nPos = new Pos(ny, nx, cur.dist + 1);
+				
 				isChecked[ny][nx] = true;
 				if (cloneBoard[ny][nx] == 1) {
-					enemyList.add(nPos);
+					return nPos;
 				}
 				if (nPos.dist == depth) continue;
 				que.add(nPos);
@@ -141,10 +143,7 @@ public class Main {
 			if (enemyList.size() != 0) break;
 		}
 		
-		if (enemyList.size() != 0) {
-			Collections.sort(enemyList);
-			return enemyList.get(0);
-		} else return null;
+		return null;
 	}
 	
 	static int move() {
@@ -191,7 +190,7 @@ public class Main {
 		@Override
 		public int compareTo(Pos o) {
 			if (this.dist != o.dist) return o.dist - this.dist; 
-			if (this.x != o.x) return this.x - o.x;
+			if (this.x != o.x) return o.x - this.x;
 			else return 0;
 		}
 	}
