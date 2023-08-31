@@ -60,7 +60,7 @@ public class Main {
 
     public static void bfs(int start) {
 
-        Deque<Integer> queue = new LinkedList<>();
+        Deque<Integer> queue = new ArrayDeque<>();
         visit = new boolean[n + 1];
         visit[start] = true;
         queue.add(start);
