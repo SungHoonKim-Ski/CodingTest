@@ -1,71 +1,93 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.io.*;
 import java.util.Arrays;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class Main {
+    static FastReader scan = new FastReader();
+    static StringBuilder sb = new StringBuilder();
 
-    static int N;
-    static int M;
-    	static boolean[] visit;
-    static int[] arr;
-    static List<Integer> list;
-    static StringBuilder str;
-    static void dfs(int depth, int num) {
+    static int N, M;
+    static int[] input_val;
+    static int[] prev_val;
 
-        if(depth==M) {
+    static void input() {
 
-            for (int i = 0; i < list.size(); i++) {
-//                if(list.get(i)!=0)
-                str.append(list.get(i)).append(" ");
+        N = scan.nextInt();
+        M = scan.nextInt();
+        input_val = new int[N];
+        prev_val = new int[M];
+        for (int i = 0; i < N; i++) input_val[i] = scan.nextInt();
+    }
+
+    static void pro() {
+        Arrays.sort(input_val);
+        recur_func(0, 0);
+        System.out.println(sb);
+    }
+
+    static void recur_func(int depth, int idx) {
+        if (depth == M) {
+            for (int i = 0; i < M; i++) {
+                sb.append(prev_val[i]).append(' ');
             }
-            str.append("\n");
-            return;
-        }
-
-        for(int i = num; i < N; i++) {
-
-//			if(!visit[i]) {
-//				visit[i] = true;
-//            if(i==0) continue;
-
-	            list.add(arr[i]);
-	//				System.out.println("현재 i "+i);
-	            dfs(depth+1, i);
-//				visit[i] = false;
-	            list.remove(list.size()-1);
-//			}
+            sb.append('\n');
+        }else {
+            for (int i = idx; i < N; i++){
+                prev_val[depth] = input_val[i];
+                recur_func(depth + 1, i);
+            }
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        // TODO Auto-generated method stub
+    public static void main(String[] args) {
+        input();
+        pro();
+    }
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stf = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(stf.nextToken());
-        M = Integer.parseInt(stf.nextToken());
-        arr = new int[N];
+
+    static class FastReader {
+        BufferedReader br;
+        StringTokenizer st;
+
+        public FastReader() {
+            br = new BufferedReader(new InputStreamReader(System.in));
+        }
+
+        public FastReader(String s) throws FileNotFoundException {
+            br = new BufferedReader(new FileReader(new File(s)));
+        }
         
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < arr.length; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-        Arrays.sort(arr);
-        str = new StringBuilder();
-        visit = new boolean[N];
-        list = new ArrayList<>();
-//        StringTokenizer st = new StringTokenizer(br.readLine());
+        String next() {
+            while (st == null || !st.hasMoreElements()) {
+                try {
+                    st = new StringTokenizer(br.readLine());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return st.nextToken();
+        }
 
-        dfs(0, 0);
+        int nextInt() {
+            return Integer.parseInt(next());
+        }
 
-        System.out.println(str);
+        long nextLong() {
+            return Long.parseLong(next());
+        }
 
+        double nextDouble() {
+            return Double.parseDouble(next());
+        }
 
-
+        String nextLine() {
+            String str = "";
+            try {
+                str = br.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return str;
+        }
     }
-
 }
