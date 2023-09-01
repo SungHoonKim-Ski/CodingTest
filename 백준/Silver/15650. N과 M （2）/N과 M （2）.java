@@ -1,55 +1,64 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-	
-	static int N;
-	static int M;
-	static boolean[] visit;
-	static List<Integer> list;
-	static void dfs(int depth, int num) {
-		
-		if(depth==M) {
-			for (int i = 0; i < list.size(); i++) {
-				System.out.print(list.get(i)+" ");		
-			}
-			System.out.println();
-			return;
-		}
-		
-		for(int i = num+1; i <= N; i++) {
-			
-			if(!visit[i]) {
-				visit[i] = true;
-				list.add(i);
-//				System.out.println("현재 i "+i);
-				dfs(depth+1, i);
-				visit[i] = false;
-				list.remove(list.size()-1);
-			}			
-		}
-	}
 
-	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stf = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(stf.nextToken());
-        M = Integer.parseInt(stf.nextToken());
-        visit = new boolean[N+1];	
-        list = new ArrayList<>();
-//        StringTokenizer st = new StringTokenizer(br.readLine());
-        
-        dfs(0, 0);
-        
-                
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuffer sb = new StringBuffer();
+    static StringBuffer setSb = new StringBuffer();
+    static StringTokenizer st;
+
+    static int n, m;
+
+    static int[] inputIntArr;
+    static boolean[] visit;
 
 
-	}
+    public static void input() throws IOException{
+
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+
+        inputIntArr = new int[n];
+        visit = new boolean[n];
+        for (int i = 1 ; i <= n; i++) inputIntArr[i - 1] = i;
+    }
+
+    public static void pro() {
+
+        backtracking(0, new int[m]);
+        System.out.println(sb);
+
+    }
+
+    public static void backtracking(int depth, int[] elements) {
+
+        if (depth == m) {
+            for (int i = 0; i < m; i++) {
+                sb.append(elements[i]).append(' ');
+            }
+            sb.append('\n');
+            return;
+        }
+
+        for (int i = 0; i < n; i++) {
+        	if (visit[i]) continue;
+        	if (depth != 0) {
+        		if (elements[depth - 1] >= inputIntArr[i]) continue;
+        	}
+        	visit[i] = true;
+            elements[depth] = inputIntArr[i];
+            backtracking(depth + 1, elements);
+            visit[i] = false;
+        }
+    }
+
+
+
+    public static void main(String[] args) throws IOException{
+        input();
+        pro();
+    }
 
 }
