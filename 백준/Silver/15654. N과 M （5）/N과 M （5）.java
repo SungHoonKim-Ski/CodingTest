@@ -1,71 +1,66 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.StringTokenizer;
+import java.util.*;
+import java.io.*;
 
 public class Main {
 
-    static int N;
-    static int M;
-    	static boolean[] visit;
-    static int[] arr;
-    static List<Integer> list;
-    static StringBuilder str;
-    static void dfs(int depth, int num) {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuffer sb = new StringBuffer();
+    static StringBuffer setSb = new StringBuffer();
+    static StringTokenizer st;
 
-        if(depth==M) {
+    static int n, m;
 
-            for (int i = 0; i < list.size(); i++) {
-//                if(list.get(i)!=0)
-                str.append(list.get(i)).append(" ");
-            }
-            str.append("\n");
-            return;
-        }
+    static int[] inputIntArr;
+    
+    static boolean[] visit;
 
-        for(int i = 0; i < N; i++) {
 
-			if(!visit[i]) {
-				visit[i] = true;
-//            if(i==0) continue;
+    public static void input() throws IOException{
 
-	            list.add(arr[i]);
-	//				System.out.println("현재 i "+i);
-	            dfs(depth+1, i);
-				visit[i] = false;
-	            list.remove(list.size()-1);
-			}
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+
+        inputIntArr = new int[n];
+        visit = new boolean[n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0 ; i < n; i++) {
+        	inputIntArr[i] = Integer.parseInt(st.nextToken());
         }
     }
 
-    public static void main(String[] args) throws IOException {
-        // TODO Auto-generated method stub
+    public static void pro() {
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stf = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(stf.nextToken());
-        M = Integer.parseInt(stf.nextToken());
-        arr = new int[N];
-        
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < arr.length; i++) {
-			arr[i] = Integer.parseInt(st.nextToken());
-		}
-        Arrays.sort(arr);
-        str = new StringBuilder();
-        visit = new boolean[N];
-        list = new ArrayList<>();
-//        StringTokenizer st = new StringTokenizer(br.readLine());
+    	Arrays.sort(inputIntArr);
+        backtracking(0, new int[m]);
+        System.out.println(sb);
 
-        dfs(0, 0);
+    }
 
-        System.out.println(str);
+    public static void backtracking(int depth, int[] elements) {
+
+        if (depth == m) {
+            for (int i = 0; i < m; i++) {
+                sb.append(elements[i]).append(' ');
+            }
+            sb.append('\n');
+            return;
+        }
+
+        for (int i = 0; i < n; i++) {
+        	if (visit[i]) continue;
+        	visit[i] = true;
+            elements[depth] = inputIntArr[i];
+            backtracking(depth + 1, elements);
+            visit[i] = false;
+        }
+    }
 
 
 
+    public static void main(String[] args) throws IOException{
+        input();
+        pro();
     }
 
 }
