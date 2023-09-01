@@ -1,53 +1,71 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.List;
 import java.util.StringTokenizer;
-
 
 public class Main {
 
-    static int n, m;
-    static int[] input_val;
-    static HashSet<Integer> hashSet;
-    static StringBuffer sb;
-    static int[] prev_val;
+    static int N;
+    static int M;
+    	static boolean[] visit;
+    static int[] arr;
+    static List<Integer> list;
+    static StringBuilder str;
+    static void dfs(int depth, int num) {
+
+        if(depth==M) {
+
+            for (int i = 0; i < list.size(); i++) {
+//                if(list.get(i)!=0)
+                str.append(list.get(i)).append(" ");
+            }
+            str.append("\n");
+            return;
+        }
+
+        for(int i = 0; i < N; i++) {
+
+			if(!visit[i]) {
+				visit[i] = true;
+//            if(i==0) continue;
+
+	            list.add(arr[i]);
+	//				System.out.println("현재 i "+i);
+	            dfs(depth+1, i);
+				visit[i] = false;
+	            list.remove(list.size()-1);
+			}
+        }
+    }
+
     public static void main(String[] args) throws IOException {
+        // TODO Auto-generated method stub
 
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuffer();
-        hashSet = new HashSet<>();
+        StringTokenizer stf = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(stf.nextToken());
+        M = Integer.parseInt(stf.nextToken());
+        arr = new int[N];
         
         StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
+        for (int i = 0; i < arr.length; i++) {
+			arr[i] = Integer.parseInt(st.nextToken());
+		}
+        Arrays.sort(arr);
+        str = new StringBuilder();
+        visit = new boolean[N];
+        list = new ArrayList<>();
+//        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        input_val = new int[n];
-        prev_val = new int[m];
-        st = new StringTokenizer(br.readLine());
-        for (int i = 0; i < n; i++) {
-            input_val[i] = Integer.parseInt(st.nextToken());
-        }
-        Arrays.sort(input_val);
-        recur_func(0);
-        System.out.println(sb);
+        dfs(0, 0);
+
+        System.out.println(str);
+
+
+
     }
 
-    static void recur_func(int depth) {
-        if (depth == m) {
-            for (int i = 0; i < m; i++) {
-                sb.append(prev_val[i]).append(' ');
-            }
-            sb.append('\n');
-        }else {
-            for (int i = 0; i < n; i++){
-                if(hashSet.add(input_val[i])) {
-                    prev_val[hashSet.size() - 1] = input_val[i];
-                    recur_func(depth + 1);
-                    hashSet.remove(input_val[i]);
-                }
-            }
-        }
-    }
 }
