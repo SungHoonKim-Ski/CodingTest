@@ -20,10 +20,10 @@ public class Main {
         while (b > a) {
             if (b % 10 == 1) {
                 b /= 10;
-            } else if (b % 2 == 1){
-                break;
-            } else {
+            } else if (b % 2 == 0){
                 b /= 2;
+            } else {
+                break;
             }
             cnt++;
         }
