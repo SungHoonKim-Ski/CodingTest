@@ -17,18 +17,7 @@ public class Main {
 
         for (int i = 0; i < n; i++) {
             String s = br.readLine();
-            if (s.contains("boj.kr/")) {
-                st = new StringTokenizer(s, "/");
-                st.nextToken();
-                try {
-                    int num = Integer.parseInt(st.nextToken());
-                    if (st.hasMoreTokens()) {
-                        list1.add(s);
-                    } else list2.add(s);
-                } catch (NumberFormatException e) {
-                    list1.add(s);
-                }
-            }
+            if (s.contains("boj.kr/"))list2.add(s);
             else list1.add(s);
         }
 
