@@ -24,9 +24,8 @@ public class Main {
     static void pro() {
 
         for (int i = 0; i < n; i++) {
-            arrCnt[aArr[i] + 20000]++;
+            arrCnt[aArr[i] + 20000]++; // 초기값 할당
         }
-        Arrays.sort(aArr);
         dfs(0, 0, 0);
         System.out.println(res / 3);
     }
@@ -45,9 +44,6 @@ public class Main {
         }
 
     }
-
-
-
 
     public static void main(String[] args) throws IOException{
         input();
