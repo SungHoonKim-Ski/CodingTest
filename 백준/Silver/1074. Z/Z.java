@@ -1,17 +1,21 @@
 import java.io.*;
+import java.nio.Buffer;
 import java.util.*;
 
 public class Main {
-    static FastReader scan = new FastReader();
+
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static int N, R, C;
     static int cnt = 0;
     static boolean flag = false;
 
-    static void input() {
-        N = scan.nextInt();
-        R = scan.nextInt();
-        C = scan.nextInt();
+    static void input() throws IOException{
+        st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        R = Integer.parseInt(st.nextToken());
+        C = Integer.parseInt(st.nextToken());
     }
 
     static void pro() {
@@ -42,55 +46,8 @@ public class Main {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         input();
         pro();
-    }
-
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
     }
 }
