@@ -40,7 +40,7 @@ public class Main {
             time++;
             int meltCheeseCnt = bfs();
             if (cheeseCnt - meltCheeseCnt == 0) break;
-            cheeseCnt -= meltCheeseCnt;
+            else cheeseCnt -= meltCheeseCnt;
         }
         sb.append(time).append('\n').append(cheeseCnt);
         System.out.println(sb);
