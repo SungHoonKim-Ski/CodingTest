@@ -1,53 +1,67 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
 
 public class Main {
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static ArrayList<Integer>[] graph;
+    static int N, S, D, distSum;
 
-	static int n;
-	static int s;
-	static int d;
-	static ArrayList<Integer>[] g;
-	static int ans = 0;
+    static boolean[] visit, isCount;
 
-	public static void main(String[] args) {
-		try {
-			BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-			String[] str = br.readLine().split(" ");
-			n = Integer.parseInt(str[0]);
-			s = Integer.parseInt(str[1]) - 1;
-			d = Integer.parseInt(str[2]);
-			g = new ArrayList[n];
+    static void input() throws IOException{
+         st = new StringTokenizer(br.readLine());
+         N = Integer.parseInt(st.nextToken());
+         S = Integer.parseInt(st.nextToken());
+         D = Integer.parseInt(st.nextToken());
 
-			for (int i = 0; i < n; i++)
-				g[i] = new ArrayList<Integer>();
+         graph = new ArrayList[N + 1];
+         for (int i = 1; i <= N; i++) graph[i] = new ArrayList<>();
 
-			for (int i = 0; i < n - 1; i++) {
-				str = br.readLine().split(" ");
-				int a = Integer.parseInt(str[0]) - 1;
-				int b = Integer.parseInt(str[1]) - 1;
-				g[a].add(b);
-				g[b].add(a);
-			}
+         for (int i = 1; i < N; i++) {
+             st = new StringTokenizer(br.readLine());
+             int start = Integer.parseInt(st.nextToken());
+             int end = Integer.parseInt(st.nextToken());
+             graph[start].add(end);
+             graph[end].add(start); // 양방향 그래프이므로 둘 다 추가
+         }
 
-			dfs(s, -1);
-			System.out.println(ans * 2);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+         visit = new boolean[N + 1];
+         isCount = new boolean[N + 1];
+    }
 
-	}
+    static void pro() {
 
-	public static int dfs(int now, int prev) {
-		int max = 0;
-		for (int next : g[now]) {
-			if (next != prev) {
-				max = Math.max(max, dfs(next, now) + 1);
-			}
-		}
-		if (now != s && max >= d) {
-			ans++;
-		}
-		return max;
-	}
+        visit[S] = true;
+        isCount[S] = true;
+        dfs(S);
+        System.out.println(distSum * 2); // 왕복이므로 2배
+    }
+
+    static int dfs(int curIdx) {
+
+        int maxDist = 0;
+
+        for (int nextIdx : graph[curIdx]) {
+            if (visit[nextIdx]) continue;
+            visit[nextIdx] = true;
+            maxDist = Math.max(maxDist, dfs(nextIdx) + 1);
+        }
+
+
+        if (!isCount[curIdx] && maxDist >= D) {
+            isCount[curIdx] = true;
+            distSum++;
+        }
+
+        return maxDist;
+    }
+
+    public static void main(String[] args) throws IOException{
+        input();
+        pro();
+    }
+
 
 }
