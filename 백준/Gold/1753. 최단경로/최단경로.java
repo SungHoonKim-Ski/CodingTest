@@ -2,136 +2,85 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static FastReader scan = new FastReader();
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    
+    static int V, E, start;
+    static ArrayList<Edge>[] graph;
 
-    static class Edge {
-        public int to; 
-        public int weight;
-
-        public Edge(int _to, int _weight) {
-            this.to = _to;
-            this.weight = _weight;
+    static int[] cost;
+    static class Edge{
+        int to, weight;
+        Edge(int _to, int _weight) {
+            to = _to; weight = _weight;
+        } 
+    }
+    
+    static class Info{
+        int idx, dist;
+        Info (int _idx, int _dist) {
+            idx = _idx; dist = _dist;
         }
     }
+    
+    static void input() throws IOException{
+         st = new StringTokenizer(br.readLine());
+         V = Integer.parseInt(st.nextToken());
+         E = Integer.parseInt(st.nextToken());
+         start = Integer.parseInt(br.readLine());
 
-    static class Info {
-        public int idx, dist;
+         graph = new ArrayList[V + 1];
+         for (int i = 1; i <= V; i++) graph[i] = new ArrayList<>();
 
-        public Info() {
-        }
+         while (E-- > 0) {
+             st = new StringTokenizer(br.readLine());
+             int u = Integer.parseInt(st.nextToken());
+             int v = Integer.parseInt(st.nextToken());
+             int w = Integer.parseInt(st.nextToken());
+             graph[u].add(new Edge(v, w));
+         }
 
-        public Info(int _idx, int _dist) {
-            this.idx = _idx;
-            this.dist = _dist;
-        }
-    }
-
-    static int N, M, start, end;
-    static int[] dist;
-    static ArrayList<Edge>[] edges;
-
-    static void input() {
-        N = scan.nextInt();
-        M = scan.nextInt();
-        start = scan.nextInt();
-        dist = new int[N + 1];
-        edges = new ArrayList[N + 1];
-        for (int i = 1; i <= N; i++) edges[i] = new ArrayList<Edge>();
-        for (int i = 1; i <= M; i++) {
-            int from = scan.nextInt();
-            int to = scan.nextInt();
-            int weight = scan.nextInt();
-            edges[from].add(new Edge(to, weight));
-        }
+         cost = new int[V + 1];
     }
 
     static void dijkstra(int start) {
 
-    	for (int i = 1; i <= N; i++) dist[i] = Integer.MAX_VALUE; 
-    	PriorityQueue<Info> pq = new PriorityQueue<>(Comparator.comparingLong(o -> o.dist));
-    	// 다른 방법) PriorityQueue<Info> pq = new PriorityQueue<>((o1, o2) -> o1.dist - o2.dist);
-    	pq.add(new Info(start, 0));
-    	dist[start] = 0;
-        while (!pq.isEmpty()) {
-            Info info = pq.poll();
-            if (info.dist != dist[info.idx]) continue;
-            // 꺼낸 정보가 최신 정보랑 다르면, 의미없이 낡은 정보이므로 폐기한다.
-            /* TODO */
+        for (int i = 1; i <= V; i++) cost[i] = Integer.MAX_VALUE;
+        cost[start] = 0;
 
-            // 연결된 모든 간선들을 통해서 다른 정점들에 대한 정보를 갱신해준다.
-            for (Edge e : edges[info.idx]) {
-                // e.to 까지 갈 수 있는 더 짧은 거리를 찾았다면 이에 대한 정보를 갱신하고 PQ에 기록해준다.
-            	if (e.weight + info.dist < dist[e.to]) {
-            		dist[e.to] = e.weight + dist[info.idx];
-            		pq.add(new Info(e.to, dist[e.to]));
-            	}
-                /* TODO */
+        PriorityQueue<Info> pq = new PriorityQueue<>((o1, o2) -> o1.dist - o2.dist);
+
+        pq.add(new Info(start, 0));
+        while (!pq.isEmpty()) {
+            Info curInfo = pq.poll();
+            if (cost[curInfo.idx] != curInfo.dist) continue;
+
+            for (Edge next : graph[curInfo.idx]) {
+                if (cost[next.to] > curInfo.dist + next.weight) {
+                    cost[next.to] = curInfo.dist + next.weight;
+                    pq.add(new Info(next.to, cost[next.to]));
+                }
             }
         }
+
+        for (int i = 1; i <= V; i++) {
+            if (cost[i] == Integer.MAX_VALUE) sb.append("INF");
+            else sb.append(cost[i]);
+            sb.append('\n');
+        }
+        System.out.println(sb);
     }
 
     static void pro() {
         dijkstra(start);
-        for (int i = 1; i <= N; i++) {
-        	if (dist[i] == Integer.MAX_VALUE) {
-        		sb.append("INF").append('\n');
-        		continue;
-        	}
-        	sb.append(dist[i]).append('\n');
-        }
-        System.out.print(sb);
+
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException{
         input();
         pro();
     }
 
 
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
-    }
 }
