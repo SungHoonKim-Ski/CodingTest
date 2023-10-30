@@ -8,13 +8,10 @@ public class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
     static int n, m;
-    static ArrayList<Integer>[] parentChildGraph, childParentGraph;
-    static int[] indeg;
-    static double[] power;
+    static ArrayList<Integer>[] parentChildGraph;
+    static int[] indeg; // 진입차수
+    static double[] power; // 힘 float x
 
-    static boolean[] visit;
-
-    static HashMap<Integer, String> idxNameMap;
     static HashMap<String, Integer> nameIdxMap;
     static HashSet<String> candiSet;
     static String king;
@@ -23,7 +20,6 @@ public class Main {
 
     static void input() throws IOException {
 
-        idxNameMap = new HashMap<>();
         nameIdxMap = new HashMap<>();
 
         st = new StringTokenizer(br.readLine());
@@ -31,20 +27,16 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
 
         king = br.readLine();
-        nameIdxMap.put(king, nameIdx);
-        idxNameMap.put(nameIdx++, king);
+        nameIdxMap.put(king, nameIdx++);
 
         parentChildGraph = new ArrayList[n * 3 + 1];
-        childParentGraph = new ArrayList[n * 3 + 1];
         power = new double[n * 3 + 1];
-        visit = new boolean[n * 3 + 1];
         indeg = new int[n * 3 + 1];
 
         for (int i = 0; i <= n * 3; i++) {
             parentChildGraph[i] = new ArrayList<>();
-            childParentGraph[i] = new ArrayList<>();
         }
-        // 최대 개수는 3n개?
+        // 최대 정점 개수는 3n개정도 될듯..
 
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
@@ -58,11 +50,11 @@ public class Main {
             childIdx = parent1Idx = parent2Idx = -1;
 
             if (nameIdxMap.containsKey(child)) {
-                childIdx = nameIdxMap.get(child); // 앞에 나온적이 있다면
+                childIdx = nameIdxMap.get(child); // 앞에 나온적이 있다면 해당 인덱스를 가져오고
             }
             else {
-                nameIdxMap.put(child, nameIdx);
-                idxNameMap.put(nameIdx, child);
+                // 나온적이 없다면 이름을 숫자로 부를 별칭을 만들고
+                nameIdxMap.put(child, nameIdx);  // 이를 이름 - 별칭 map에 저장
                 childIdx = nameIdx;
                 nameIdx++;
             }
@@ -72,7 +64,6 @@ public class Main {
             }
             else {
                 nameIdxMap.put(parent1, nameIdx);
-                idxNameMap.put(nameIdx, parent1);
                 parent1Idx = nameIdx;
                 nameIdx++;
             }
@@ -82,20 +73,18 @@ public class Main {
             }
             else {
                 nameIdxMap.put(parent2, nameIdx);
-                idxNameMap.put(nameIdx, parent2);
                 parent2Idx = nameIdx;
                 nameIdx++;
             }
             parentChildGraph[parent1Idx].add(childIdx);
             parentChildGraph[parent2Idx].add(childIdx);
-            childParentGraph[childIdx].add(parent1Idx);
-            childParentGraph[childIdx].add(parent2Idx);
 
-            indeg[childIdx] += 2;
+            indeg[childIdx] += 2; // 자식 기준으로 부모가 두 명이므로
+            // 진입 차수가 2라고 볼 수 있음
         }
 
         candiSet = new HashSet<>();
-        while (m-- > 0) candiSet.add(br.readLine());
+        while (m-- > 0) candiSet.add(br.readLine()); // 나중에 후보로 들어오는 이름들
 
     }
 
@@ -106,46 +95,43 @@ public class Main {
         
         for (int i = 0; i < nameIdx; i++) {
             if (indeg[i] == 0) que.add(i);
+            // 진입차수가 0인 부모들을 모두 add
+            // 위상정렬 방식
         }
 
         while (!que.isEmpty()) {
 
             int curIdx = que.poll();
 
-            double curPower = power[curIdx];
+            double curPower = power[curIdx]; // 현재 나의 힘
 
             for (int nextIdx : parentChildGraph[curIdx]) {
                 if (indeg[nextIdx] == 0) continue;
 
-                power[nextIdx] += curPower;
-                indeg[nextIdx]--;
+                power[nextIdx] += curPower; // 내 힘을 자식에게 물려준다
+                indeg[nextIdx]--; // 자식의 진입차수 --
 
-                if (indeg[nextIdx] == 0) {
-                    power[nextIdx] /= 2;
-                    que.add(nextIdx);
+                if (indeg[nextIdx] == 0) { // 만약 두 부모에게 모두 물려받았다면
+                    power[nextIdx] /= 2; // 나의 힘을 2로 나누고
+                    que.add(nextIdx); // que에 add
                 }
             }
         }
 
-        double maxPower = -1;
+        double maxPower = -1; // 최악의 경우 0이므로 최소값을 -1로 잡음
         String maxName = "";
 
         for (String cand : candiSet) {
             int candIdx = nameIdxMap.getOrDefault(cand, -1);
-            if (candIdx == -1) continue;
+            if (candIdx == -1) continue; // 앞에 계산에서 나오지 않았던 이름이 후보군에 나올 수 있음
+            // 이 부분 예외처리
+
             double candPower = power[candIdx];
             if (maxPower < candPower) {
                 maxPower = candPower;
                 maxName = cand;
             }
         }
-//        for (int i = 0; i < power.length; i++) {
-//            sb.append(idxNameMap.get(i)).append(' ');
-//            sb.append(power[i]).append(' ');
-//            sb.append('\n');
-//
-//        }
-//        System.out.println(sb);
 
         System.out.println(maxName);
 
