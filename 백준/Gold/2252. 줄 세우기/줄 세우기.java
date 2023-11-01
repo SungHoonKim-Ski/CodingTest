@@ -1,93 +1,64 @@
-import java.io.*;
 import java.util.*;
+import java.io.*;
 
 public class Main {
-    static FastReader scan = new FastReader();
+
+    static StringTokenizer st;
     static StringBuilder sb = new StringBuilder();
-
-    static int N, M;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static ArrayList<Integer>[] graph;
+    static int n, m;
     static int[] indeg;
-    static ArrayList<Integer>[] adj;
 
-    static void input() {
-        N = scan.nextInt();
-        M = scan.nextInt();
-        adj = new ArrayList[N + 1];
-        indeg = new int[N + 1];
-        for (int i = 1; i <= N; i++) adj[i] = new ArrayList<>();
-        while (M-- > 0) {
-            int s = scan.nextInt();
-            int e = scan.nextInt();
-            adj[s].add(e);
-            indeg[e]++;
+    static void input() throws IOException {
+
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+
+        indeg = new int[n + 1];
+        graph = new ArrayList[n + 1];
+        for (int i = 1; i <= n; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        while (m-- > 0) {
+            st = new StringTokenizer(br.readLine());
+
+            int low = Integer.parseInt(st.nextToken());
+            int high = Integer.parseInt(st.nextToken());
+
+            graph[low].add(high);
+            indeg[high]++;
         }
     }
 
-    static void pro() {
-        Deque<Integer> queue = new LinkedList<>();
-        for (int i = 1; i <= N; i++) if (indeg[i] == 0) queue.add(i);
-        while (!queue.isEmpty()) {
+    static void toplogic() {
 
-            int cur = queue.poll();
-            sb.append(cur).append(' ');
-            for (int v: adj[cur]) {
-                indeg[v]--;
-                if (indeg[v] == 0) queue.add(v);
-            }
+        Deque<Integer> que = new ArrayDeque<>();
+        for (int i = 1; i <= n; i++) {
+            if (indeg[i] == 0) que.add(i);
         }
 
+        while (!que.isEmpty()) {
+            int low = que.poll();
+            sb.append(low).append(' ');
+
+            for (int high : graph[low]) {
+                if (indeg[high] == 0) continue;
+                indeg[high]--;
+                if (indeg[high] == 0) que.add(high);
+            }
+        }
         System.out.println(sb);
     }
 
-    public static void main(String[] args) {
-        input();
-        pro();
+    static void pro(){
+        toplogic();
     }
 
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
+    public static void main(String[] args) throws IOException {
+        input();
+        pro();
     }
 }
