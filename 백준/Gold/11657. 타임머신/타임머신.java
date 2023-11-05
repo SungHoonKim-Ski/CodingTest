@@ -14,15 +14,7 @@ public class Main {
         }
     }
 
-    static class Info {
-        int idx, dist;
-        Info(int _idx, int _dist) {
-            idx = _idx; dist = _dist;
-        }
-    }
-
     static final long INF = Integer.MAX_VALUE;
-
     static int n, m;
     static long[] dist;
     static ArrayList<Edge>[] graph;
@@ -37,7 +29,6 @@ public class Main {
 
         for (int i = 1; i <= n; i++) {
             graph[i] = new ArrayList<>();
-            dist[i] = INF;
         }
 
         int start, end, weight;
@@ -53,16 +44,17 @@ public class Main {
 
     static void pro(){
 
+        for (int i = 1; i <= n; i++) dist[i] = INF;
         dist[1] = 0;
+
         boolean isCycle = false;
 
         for (int round = 1; round <= n; round++) {
 
             for (int start = 1; start <= n; start++) {
-
+                if (dist[start] == INF) continue;
                 for (Edge end : graph[start]) {
-                    if (dist[start] == INF) continue;
-                    
+
                     if (dist[end.to] > dist[start] + end.weight) {
                         dist[end.to] = dist[start] + end.weight;
 
