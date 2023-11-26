@@ -1,0 +1,25 @@
+import java.math.BigInteger;
+import java.util.*;
+import java.io.*;
+
+public class Main {
+
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuffer sb = new StringBuffer();
+
+    static int cnt;
+    static void input() throws IOException{
+        cnt = br.readLine().length();
+    }
+
+    static void pro(){
+        System.out.println(cnt);
+    }
+
+    public static void main(String[] args) throws IOException{
+        input();
+        pro();
+
+    }
+
+}
