@@ -8,7 +8,7 @@ public class Main {
     static StringBuffer sb = new StringBuffer();
     static StringTokenizer st;
 
-    static int a, b;
+    static long a, b;
 
     static void input() throws IOException{
         st = new StringTokenizer(br.readLine());
