@@ -1,7 +1,4 @@
 # 코딩테스트 코드들을 저장했습니다.
-[my solved.ac](https://solved.ac/profile/ksh7412_dev)
-<hr>
-
 
 > 9/1 부터 틀리거나 참고 후 다시 작성한 문제 등 자동으로 업로드 되지 않은 내용들은 Baekjoon 폴더 내에 작성했습니다   
 
