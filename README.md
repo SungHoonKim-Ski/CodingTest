@@ -1,5 +1,5 @@
 # 코딩테스트 코드들을 저장했습니다.
-[my solved.ac](https://solved.ac/profile/ksh7412_dev, "ksh")
+[my solved.ac](https://solved.ac/profile/ksh7412_dev)
 <hr>
 
 
