@@ -1,46 +1,50 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.StringTokenizer;
 
-class Main {
-    static BufferedReader br;
-    static StringBuffer sb;
+public class Main {
 
-    static int res = 0;
-    static int[] Arr;
-    static int N;
-    static int[] DpArr;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuffer sb = new StringBuffer();
+    static StringTokenizer st;
+
+    static int[] arr, dp;
+    static int n;
+    static void input() throws IOException {
+        n = Integer.parseInt(br.readLine());
+        arr = new int[n + 1];
+        dp = new int[n + 1];
+
+        for (int i = 1; i <= n; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
+        }
+
+    }
+
+    static void pro(){
+
+        dp[1] = arr[1];
+        if (n == 1) {
+            System.out.println(dp[1]);
+            return;
+        }
+        
+        dp[2] = dp[1] + arr[2];
+
+        for (int i = 3; i <= n; i++) {
+            dp[i] = Math.max(dp[i - 3] + arr[i - 1], dp[i - 2]) + arr[i];
+        }
+        System.out.println(dp[n]);
+    }
+
+
     public static void main(String[] args) throws IOException {
 
-        br = new BufferedReader(new InputStreamReader(System.in));
-        sb = new StringBuffer();
-
-        N = Integer.parseInt(br.readLine());
-        Arr = new int[N+1];
-        DpArr = new int[N+1];
-        Arr[0] = 0;
-        DpArr[0] = 0;
-
-        for (int i=1; i<=N; i++) {
-            Arr[i] = Integer.parseInt(br.readLine());
-        }
-
-        DpArr[1] = Arr[1];
-        if (N > 1) {
-            DpArr[2] = Arr[1] + Arr[2];
-        }
-
-        System.out.println(dp(N));
+        input();
+        pro();
     }
 
-    public static int dp(int index) {
-        if (index < 1) {
-            return 0;
-        }
-        if (DpArr[index] == 0) {
-            DpArr[index] = Math.max(dp(index-2), dp(index-3) + Arr[index-1]) + Arr[index];
-        }
-        return DpArr[index];
-    }
 }
