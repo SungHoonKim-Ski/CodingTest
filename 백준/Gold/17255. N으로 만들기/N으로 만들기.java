@@ -7,11 +7,8 @@ class Main {
     static StringBuilder sb = new StringBuilder();
     static StringTokenizer st;
 
-    static int MAX_VALUE = 10_000_000;
-    static int nNum, len, candidateCnt;
+    static int candidateCnt;
     static String n;
-    static HashSet<String> validNumSet, visitSet;
-    static HashSet<Integer> nSet;
     static void input() throws IOException{
         n = br.readLine();
         sb = new StringBuilder(n);
@@ -20,7 +17,6 @@ class Main {
     static void pro() {
 
         dfs(sb);
-
         System.out.println(candidateCnt);
     }
 
