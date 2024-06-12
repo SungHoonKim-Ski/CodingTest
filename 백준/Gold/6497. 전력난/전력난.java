@@ -62,20 +62,15 @@ class Main {
 
         while (!pq.isEmpty()) {
             Info cur = pq.poll();
+            if (visit[cur.idx]) continue;
             visit[cur.idx] = true;
-
+            costSum -= cur.dist;
             for (Edge next : graph[cur.idx]) {
                 if (visit[next.to]) continue;
-                if (minDist[next.to] > next.weight) {
-                    minDist[next.to] = next.weight;
-                }
                 pq.add(new Info(next.to, next.weight));
             }
         }
 
-        for (long i : minDist) {
-            costSum -= i;
-        }
 
         sb.append(costSum).append('\n');
     }
