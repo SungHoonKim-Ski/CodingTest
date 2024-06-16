@@ -6,39 +6,35 @@ class Main {
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuffer sb = new StringBuffer();
     static StringTokenizer st;
-    static ArrayList<Edge>[] graph;
-
     static int n, m;
-
-    static long[] minDist;
-    static boolean[] visit;
     static long costSum;
-    static class Info {
-        int idx;
-        long dist;
 
-        Info(int _idx, long _dist) {
-            idx = _idx; dist = _dist;
-        }
-    }
-    static class Edge {
-        int to;
+    static int[] parent;
+    static ArrayList<Edge> edgeList;
+
+    static class Edge implements Comparable<Edge>{
+        int from, to;
         long weight;
 
-        Edge(int _to, long _weight) {
-            to = _to; weight = _weight;
+        Edge(int _from, int _to, long _weight) {
+            from = _from; to = _to; weight = _weight;
+        }
+
+        @Override
+        public int compareTo(Edge e) {
+            return Long.compare(this.weight, e.weight);
         }
     }
 
     static void input() throws IOException{
 
-        minDist = new long[n];
-        visit = new boolean[n];
-        Arrays.fill(minDist, Long.MAX_VALUE);
+        parent = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
 
-        graph = new ArrayList[n];
+//        visit = new boolean[n];
         costSum = 0;
-        for (int i = 0; i < n; i++) graph[i] = new ArrayList<>();
+        
+        edgeList = new ArrayList<>();
 
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
@@ -46,31 +42,47 @@ class Main {
             int y = Integer.parseInt(st.nextToken());
             int z = Integer.parseInt(st.nextToken());
 
-            graph[x].add(new Edge(y, z));
-            graph[y].add(new Edge(x, z));
+            edgeList.add(new Edge(x, y, z));
             costSum += z;
         }
     }
 
+    static boolean union(int a, int b) {
+
+        int parentA = find(a);
+        int parentB = find(b);
+        if (parentA == parentB) return false;
+        parent[parentB] = parentA;
+        return true;
+    }
+
+    static int find(int a) {
+        if (parent[a] == a) return a;
+        return parent[a] = find(parent[a]);
+    }
     static void pro() {
 
-        PriorityQueue<Info> pq = new PriorityQueue<>((o1, o2) -> Long.compare(o1.dist,o2.dist));
-        pq.add(new Info(0, 0));
 
-        minDist[0] = 0;
-//        visit[0] = true;
 
-        while (!pq.isEmpty()) {
-            Info cur = pq.poll();
-            if (visit[cur.idx]) continue;
-            visit[cur.idx] = true;
-            costSum -= cur.dist;
-            for (Edge next : graph[cur.idx]) {
-                if (visit[next.to]) continue;
-                pq.add(new Info(next.to, next.weight));
+        Collections.sort(edgeList);
+
+        int vertex = 0;
+
+        for (Edge e : edgeList) {
+
+            if (union(e.from, e.to)) {
+                vertex++;
+                costSum -= e.weight;
+                if (vertex == n + 1) break;
             }
-        }
+//            System.out.println(e.from + " -> " + e.to + " : " + e.weight);
+//            if (!visit[e.from]) vertex++;
+//            if (!visit[e.to]) vertex++;
+//            union(e.from, e.to);
+//            visit[e.from] = true;
+//            visit[e.to] = true;
 
+        }
 
         sb.append(costSum).append('\n');
     }
