@@ -31,9 +31,8 @@ class Main {
         parent = new int[n];
         for (int i = 0; i < n; i++) parent[i] = i;
 
-//        visit = new boolean[n];
         costSum = 0;
-        
+
         edgeList = new ArrayList<>();
 
         for (int i = 0; i < m; i++) {
@@ -61,9 +60,7 @@ class Main {
         return parent[a] = find(parent[a]);
     }
     static void pro() {
-
-
-
+        
         Collections.sort(edgeList);
 
         int vertex = 0;
@@ -75,13 +72,6 @@ class Main {
                 costSum -= e.weight;
                 if (vertex == n + 1) break;
             }
-//            System.out.println(e.from + " -> " + e.to + " : " + e.weight);
-//            if (!visit[e.from]) vertex++;
-//            if (!visit[e.to]) vertex++;
-//            union(e.from, e.to);
-//            visit[e.from] = true;
-//            visit[e.to] = true;
-
         }
 
         sb.append(costSum).append('\n');
