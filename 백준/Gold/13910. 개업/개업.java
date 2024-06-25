@@ -35,18 +35,18 @@ public class Main {
             }
         }
 
-        Arrays.fill(dp, Integer.MAX_VALUE);
+        Arrays.fill(dp, 1234567);
         dp[0] = 0;
 
         for (int i = 1; i <= n; i++) {
             for (int wok : wokSet) {
-                if (i - wok >= 0 && dp[i - wok] != Integer.MAX_VALUE) {
+                if (i - wok >= 0) {
                     dp[i] = Math.min(dp[i - wok] + 1, dp[i]);
                 }
             }
         }
 
-        if (dp[n] == Integer.MAX_VALUE) dp[n] = -1;
+        if (dp[n] == 1234567) dp[n] = -1;
         System.out.println(dp[n]);
     }
 
