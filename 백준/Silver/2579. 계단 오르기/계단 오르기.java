@@ -1,50 +1,45 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuffer sb = new StringBuffer();
     static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
 
-    static int[] arr, dp;
     static int n;
+    static int[] dp, score;
+
     static void input() throws IOException {
         n = Integer.parseInt(br.readLine());
-        arr = new int[n + 1];
-        dp = new int[n + 1];
-
+        score = new int[n + 1];
         for (int i = 1; i <= n; i++) {
-            arr[i] = Integer.parseInt(br.readLine());
+            score[i] = Integer.parseInt(br.readLine());
         }
 
+        dp = new int[n + 1];
     }
 
-    static void pro(){
+    static void pro() {
+        dp[1] = score[1];
+        if (n != 1) dp[2] = score[2] + score[1];
 
-        dp[1] = arr[1];
-        if (n == 1) {
-            System.out.println(dp[1]);
-            return;
-        }
-        
-        dp[2] = dp[1] + arr[2];
-
-        for (int i = 3; i <= n; i++) {
-            dp[i] = Math.max(dp[i - 3] + arr[i - 1], dp[i - 2]) + arr[i];
-        }
+        dfs(n);
         System.out.println(dp[n]);
     }
 
+    static int dfs(int cur) {
+        if (cur <= 0) return 0;
+
+        if (dp[cur] != 0) return dp[cur];
+
+        dp[cur] = score[cur] + Math.max(dfs(cur - 3) + score[cur - 1], dfs(cur - 2));
+
+        return dp[cur];
+    }
 
     public static void main(String[] args) throws IOException {
-
         input();
         pro();
     }
-
 }
