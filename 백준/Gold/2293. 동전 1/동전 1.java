@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.*;
 
+
 public class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -8,34 +9,37 @@ public class Main {
     static StringTokenizer st;
 
     static int n, k;
-    static int[] coin, dp;
+    static int[] arr;
+    static int[] dp;
 
-    static void input() throws IOException {
+    static void input() throws Exception {
         st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         k = Integer.parseInt(st.nextToken());
+        arr = new int[n];
 
-        dp = new int[k + 1];
-        coin = new int[n];
         for (int i = 0; i < n; i++) {
-            coin[i] = Integer.parseInt(br.readLine());
+            arr[i] = Integer.parseInt(br.readLine());
         }
+        dp = new int[k + 1];
     }
 
-    static void pro() {
-
+    public static void pro() {
         dp[0] = 1;
+        
         for (int i = 0; i < n; i++) {
-            for (int j = coin[i]; j <= k; j++) {
-                dp[j] += dp[j - coin[i]];
+            for (int v = arr[i]; v <= k; v++) {
+                dp[v] += dp[v - arr[i]];
             }
         }
-
+        
         System.out.println(dp[k]);
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception{
         input();
         pro();
     }
 }
+
+
