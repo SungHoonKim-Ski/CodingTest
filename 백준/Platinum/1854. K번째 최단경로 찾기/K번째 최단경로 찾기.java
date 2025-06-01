@@ -1,67 +1,85 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringBuilder sb = new StringBuilder();
-        StringTokenizer st = new StringTokenizer(br.readLine());
 
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+    static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
 
-        ArrayList<ArrayList<int[]>> adjList = new ArrayList<>();
-        ArrayList<ArrayList<Integer>> dist = new ArrayList<>();
+    static class Edge {
+        int idx, cost;
+        Edge(int idx, int cost) {
+            this.idx = idx; this.cost = cost;
+        }
+    }
 
-        for (int i = 0; i <= n; i++) {
-            adjList.add(new ArrayList<>());
-            dist.add(new ArrayList<>());
+    static int n, m, k;
+    static ArrayList<Edge>[] graph;
+    static PriorityQueue<Integer>[] dist;
+
+    static int MAX_VALUE = Integer.MAX_VALUE / 2 - 1;
+
+    static void input() throws IOException {
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+
+        graph = new ArrayList[n + 1];
+        dist = new PriorityQueue[n + 1];
+        for (int i = 1; i <= n; i++) {
+            graph[i] = new ArrayList<>();
+            dist[i] = new PriorityQueue<>((o1, o2) -> o2 - o1);
         }
 
         for (int i = 0; i < m; i++) {
             st = new StringTokenizer(br.readLine());
-            int a = Integer.parseInt(st.nextToken());
-            int b = Integer.parseInt(st.nextToken());
-            int c = Integer.parseInt(st.nextToken());
-            adjList.get(a).add(new int[]{b, c});
+            int start = Integer.parseInt(st.nextToken());
+            int end = Integer.parseInt(st.nextToken());
+            int cost = Integer.parseInt(st.nextToken());
+
+            graph[start].add(new Edge(end, cost));
         }
+    }
 
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[1]));
-
-        pq.offer(new int[]{1, 0});
-
-        while (!pq.isEmpty()) {
-            int[] now = pq.poll();
-
-            if (dist.get(now[0]).size() >= k) {
-                continue;
-            }
-
-            dist.get(now[0]).add(now[1]);
-
-            for (int[] a : adjList.get(now[0])) {
-                pq.offer(new int[]{a[0], now[1] + a[1]});
-            }
-        }
-
+    static void pro() {
+        dijkstra(1);
         for (int i = 1; i <= n; i++) {
-            if (dist.get(i).size() < k) {
-                sb.append(-1).append('\n');
-            } else {
-                sb.append(dist.get(i).get(k - 1)).append('\n');
+            if (dist[i].size() < k) System.out.println(-1);
+            else System.out.println(dist[i].poll());
+        }
+    }
+
+    static void dijkstra(int start) {
+        PriorityQueue<Edge> pq = new PriorityQueue<>((o1, o2) -> o1.cost - o2.cost);
+
+        dist[start].add(0);
+        pq.add(new Edge(start, 0));
+
+        while (pq.size() != 0) {
+            Edge cur = pq.poll();
+
+            for (Edge next: graph[cur.idx]) {
+                int nextCost = cur.cost + next.cost;
+                
+                if (dist[next.idx].size() < k) {
+                    dist[next.idx].add(nextCost);
+                    pq.add(new Edge(next.idx, nextCost));
+                    continue;
+                }
+
+                if (dist[next.idx].peek() > nextCost) {
+                    dist[next.idx].poll();
+                    dist[next.idx].add(nextCost);
+                    pq.add(new Edge(next.idx, nextCost));
+                }
             }
         }
+    }
 
-        bw.write(sb.toString());
-        bw.flush();
+    public static void main(String[] args) throws IOException {
+        input();
+        pro();
     }
 }
