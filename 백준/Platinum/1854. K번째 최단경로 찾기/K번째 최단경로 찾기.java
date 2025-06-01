@@ -68,12 +68,12 @@ public class Main {
                     pq.add(new Edge(next.idx, nextCost));
                     continue;
                 }
+                
+                if (dist[next.idx].peek() <= nextCost) continue;
 
-                if (dist[next.idx].peek() > nextCost) {
-                    dist[next.idx].poll();
-                    dist[next.idx].add(nextCost);
-                    pq.add(new Edge(next.idx, nextCost));
-                }
+                nextCost = Math.min(dist[next.idx].poll(), nextCost);
+                dist[next.idx].add(nextCost);
+                pq.add(new Edge(next.idx, nextCost));
             }
         }
     }
