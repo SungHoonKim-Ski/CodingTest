@@ -12,7 +12,6 @@ public class Main {
     static int[] nums;
 
     static int[][] dp;
-    static boolean[][] isPalindrome;
 
     static void input() throws Exception {
         n = Integer.parseInt(br.readLine());
@@ -23,12 +22,10 @@ public class Main {
     }
 
     public static void pro() throws IOException {
-        isPalindrome = new boolean[n + 1][n + 1];
         dp = new int[n + 1][n + 1];
         for (int i = 1; i <= n; i++) {
             Arrays.fill(dp[i], -1);
             dp[i][i] = 1;
-            isPalindrome[i][i] = true;
         }
 
         int m = Integer.parseInt(br.readLine());
@@ -53,7 +50,6 @@ public class Main {
         }
 
         if (nums[i] == nums[j]) {
-            isPalindrome[i][j] = true;
             return dp[i][j] = 1;
         }
 
