@@ -30,7 +30,7 @@ public class Main {
             isPalindrome[i][j] = (str[i] == str[j]) ? 1 : 0;
         }
 
-//        calPalindrome(1, n);
+        calPalindrome(1, n);
 
         dp = new int[n + 1];
         Arrays.fill(dp, -1);
@@ -39,14 +39,23 @@ public class Main {
         System.out.println(recur(n));
     }
 
-    static int calPalindrome(int i, int j) {
-        if (i > j) return 1;
-        if (isPalindrome[i][j] != -1) return isPalindrome[i][j];
+    static void calPalindrome(int i, int j) {
+        if (i > j) return;
+        if (isPalindrome[i][j] != -1) return;
 
-        if (calPalindrome(i + 1, j - 1) == 0) return isPalindrome[i][j] = 0;
+        if (str[i] == str[j]) {
+            if (j - i <= 1) {
+                isPalindrome[i][j] = 1;
+            } else {
+                calPalindrome(i + 1, j - 1);
+                isPalindrome[i][j] = isPalindrome[i + 1][j - 1];
+            }
+        } else {
+            isPalindrome[i][j] = 0;
+        }
 
-        if (str[i] == str[j]) return isPalindrome[i][j] = 1;
-        else return isPalindrome[i][j] = 0;
+        calPalindrome(i + 1, j);
+        calPalindrome(i, j - 1);
     }
 
     static int recur(int end) {
@@ -55,7 +64,7 @@ public class Main {
         int min = n;
 
         for (int start = 1; start <= end; start++) {
-            if (calPalindrome(start, end) == 1) {
+            if (isPalindrome[start][end] == 1) {
                 min = Math.min(min, recur(start - 1) + 1);
             }
         }
