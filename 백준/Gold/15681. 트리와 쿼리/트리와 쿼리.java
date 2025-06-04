@@ -40,8 +40,9 @@ public class Main {
         recur(r);
 
         while (q-- > 0) {
-            System.out.println(dp[Integer.parseInt(br.readLine())]);
+            sb.append(dp[Integer.parseInt(br.readLine())]).append('\n');
         }
+        System.out.println(sb);
     }
 
     static int recur(int cur) {
