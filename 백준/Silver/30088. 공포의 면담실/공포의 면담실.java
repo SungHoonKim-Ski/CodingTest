@@ -9,11 +9,11 @@ public class Main {
     static StringTokenizer st;
 
     static int n;
-    static int[] prefixSum;
+    static long[] prefixSum;
 
     static void input() throws Exception {
         n = Integer.parseInt(br.readLine());
-        prefixSum = new int[n];
+        prefixSum = new long[n];
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
             int x = Integer.parseInt(st.nextToken());
@@ -25,13 +25,14 @@ public class Main {
 
     public static void pro() {
         Arrays.sort(prefixSum);
-        int result = prefixSum[0];
-        
-        for (int i = 1; i < n; i++) {
-            prefixSum[i] = prefixSum[i - 1] + prefixSum[i];
-            result += prefixSum[i];
+
+        long sum = 0, result = 0;
+
+        for (int i = 0; i < n; i++) {
+            sum += prefixSum[i];
+            result += sum;
         }
-        
+
         System.out.println(result);
     }
 
