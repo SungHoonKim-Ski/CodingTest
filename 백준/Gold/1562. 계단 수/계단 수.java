@@ -38,8 +38,8 @@ public class Main {
     }
 
     public static void pro() {
-        dp = new int[n + 1][10][TEN_BIT];
-        for (int i = 1; i <= n; i++)
+        dp = new int[MAX + 1][10][TEN_BIT];
+        for (int i = 1; i <= MAX; i++)
             for (int j = 0; j < 10; j++)
                 Arrays.fill(dp[i][j], -1);
 
