@@ -9,7 +9,10 @@ public class Main {
     static StringTokenizer st;
 
     static int n, m;
+    static boolean[][] connected;
+
     static ArrayList<Integer>[] graph;
+    static int[] hackCnts;
 
     static void input() throws Exception {
         st = new StringTokenizer(br.readLine());
@@ -18,6 +21,8 @@ public class Main {
         m = Integer.parseInt(st.nextToken());
 
         graph = new ArrayList[n + 1];
+        connected = new boolean[n + 1][n + 1];
+
         for (int i = 1; i <= n; i++) graph[i] = new ArrayList<>();
 
         for (int i = 0; i < m; i++) {
@@ -26,15 +31,25 @@ public class Main {
             int b = Integer.parseInt(st.nextToken());
 
             graph[b].add(a);
+            connected[b][a] = true;
         }
     }
 
     public static void pro() {
         int max = 0;
         ArrayList<Integer> nums = new ArrayList<>();
+        hackCnts = new int[n + 1];
 
         for (int i = 1; i <= n; i++) {
-            int hackCnt = bfs(i);
+            int hackCnt = -1;
+            for (int j = i - 1; j < i; j++) {
+                if (connected[i][j] && connected[j][i]) {
+                    hackCnt = hackCnts[j];
+                }
+            }
+
+            if (hackCnt == -1) hackCnt = bfs(i);
+
             if (max < hackCnt) {
                 max = hackCnt;
                 nums.clear();
@@ -71,7 +86,7 @@ public class Main {
             }
         }
 
-        return count;
+        return hackCnts[start] = count;
     }
 
     public static void main(String[] args) throws Exception{
