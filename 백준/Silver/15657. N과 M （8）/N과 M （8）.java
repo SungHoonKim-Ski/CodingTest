@@ -1,93 +1,53 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.util.*;
+
 
 public class Main {
-    static FastReader scan = new FastReader();
+
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-    static int N, M;
-    static int[] input_val;
-    static int[] prev_val;
+    static int n, m;
+    static int[] inputArr;
+    static boolean[] visit;
 
-    static void input() {
+    static void input() throws Exception {
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-        N = scan.nextInt();
-        M = scan.nextInt();
-        input_val = new int[N];
-        prev_val = new int[M];
-        for (int i = 0; i < N; i++) input_val[i] = scan.nextInt();
+        inputArr = new int[n];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < n; i++) {
+            inputArr[i] = Integer.parseInt(st.nextToken());
+        }
     }
 
-    static void pro() {
-        Arrays.sort(input_val);
-        recur_func(0, 0);
+    public static void pro() {
+        Arrays.sort(inputArr);
+        visit = new boolean[n];
+        backTrack(0, 0, new int[m]);
         System.out.println(sb);
     }
 
-    static void recur_func(int depth, int idx) {
-        if (depth == M) {
-            for (int i = 0; i < M; i++) {
-                sb.append(prev_val[i]).append(' ');
+    static void backTrack(int depth, int idx, int[] elements) {
+        if (depth == m) {
+            for (int element: elements) {
+                sb.append(element).append(' ');
             }
             sb.append('\n');
-        }else {
-            for (int i = idx; i < N; i++){
-                prev_val[depth] = input_val[i];
-                recur_func(depth + 1, i);
-            }
+            return;
+        }
+
+        for (int i = idx; i < n; i++) {
+            elements[depth] = inputArr[i];
+            backTrack(depth + 1, i, elements);
         }
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         input();
         pro();
-    }
-
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-        
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
     }
 }
