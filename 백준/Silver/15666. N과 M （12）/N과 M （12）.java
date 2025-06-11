@@ -1,65 +1,60 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
+
 
 public class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuffer sb = new StringBuffer();
-    static StringBuffer setSb = new StringBuffer();
+    static StringBuilder sb = new StringBuilder();
     static StringTokenizer st;
 
     static int n, m;
+    static int[] inputArr;
+    static boolean[] visit;
+    static HashSet<String> resultSet;
 
-    static int[] inputIntArr;
-
-    static HashSet<String> permutationSet;
-
-    public static void input() throws IOException{
-
+    static void input() throws Exception {
         st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
 
-        inputIntArr = new int[n];
+        inputArr = new int[n];
         st = new StringTokenizer(br.readLine());
-        for (int i =0 ; i < n; i++) inputIntArr[i] = Integer.parseInt(st.nextToken());
-        permutationSet = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            inputArr[i] = Integer.parseInt(st.nextToken());
+        }
     }
 
     public static void pro() {
+        Arrays.sort(inputArr);
+        resultSet = new HashSet<>();
+        visit = new boolean[n];
 
-        Arrays.sort(inputIntArr);
-        backtracking(0, new int[m]);
+        backTrack(0, 0, new int[m]);
+
         System.out.println(sb);
-
     }
 
-    public static void backtracking(int depth, int[] elements) {
-
+    static void backTrack(int depth, int idx, int[] elements) {
         if (depth == m) {
-            setSb.setLength(0);
-            for (int i = 0; i < m; i++) setSb.append(elements[i]).append('-');
-            if (permutationSet.add(setSb.toString())) {
-                for (int i = 0; i < m; i++) sb.append(elements[i]).append(' ');
-                sb.append('\n');
+            StringBuilder curSb = new StringBuilder();
+            for (int element: elements) {
+                curSb.append(element).append(' ');
+            }
+            if (resultSet.add(curSb.toString())) {
+                sb.append(curSb).append('\n');
             }
             return;
         }
 
-        for (int i = 0; i < n; i++) {
-            if (depth != 0) {
-                if (elements[depth - 1] > inputIntArr[i]) continue;
-            }
-            elements[depth] = inputIntArr[i];
-            backtracking(depth + 1, elements);
+        for (int i = idx; i < n; i++) {
+            elements[depth] = inputArr[i];
+            backTrack(depth + 1, i, elements);
         }
     }
 
-
-
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws Exception{
         input();
         pro();
     }
-
 }
