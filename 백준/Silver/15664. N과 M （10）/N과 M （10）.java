@@ -1,70 +1,77 @@
-import java.util.*;
 import java.io.*;
+import java.util.*;
+
 
 public class Main {
 
     static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuffer sb = new StringBuffer();
-    static StringBuffer setSb = new StringBuffer();
+    static StringBuilder sb = new StringBuilder();
     static StringTokenizer st;
 
     static int n, m;
-
-    static int[] inputIntArr;
-
+    static int[] inputArr;
     static boolean[] visit;
-    static HashSet<String> permutationSet;
+    static TreeSet<String> resultSet;
 
-    public static void input() throws IOException{
-
+    static void input() throws Exception {
         st = new StringTokenizer(br.readLine());
         n = Integer.parseInt(st.nextToken());
         m = Integer.parseInt(st.nextToken());
 
-        inputIntArr = new int[n];
-        visit = new boolean[n];
+        inputArr = new int[n];
         st = new StringTokenizer(br.readLine());
-        for (int i =0 ; i < n; i++) inputIntArr[i] = Integer.parseInt(st.nextToken());
-        permutationSet = new HashSet<>();
+        for (int i = 0; i < n; i++) {
+            inputArr[i] = Integer.parseInt(st.nextToken());
+        }
     }
 
     public static void pro() {
+        Arrays.sort(inputArr);
+        resultSet = new TreeSet<>(
+                (o1, o2) -> {
+                    String[] o1Arr = o1.split(" ");
+                    String[] o2Arr = o2.split(" ");
 
-        Arrays.sort(inputIntArr);
-        backtracking(0, new int[m]);
+                    for (int i = 0; i < o1Arr.length; i++) {
+                        if (o1Arr[i].equals(o2Arr[i])) continue;
+                        int curO1 = Integer.parseInt(o1Arr[i]);
+                        int curO2 = Integer.parseInt(o2Arr[i]);
+
+                        return curO1 - curO2;
+                    }
+                    return 0;
+                });
+        visit = new boolean[n];
+
+        backTrack(0, 0, new int[m]);
+
+        for (String result: resultSet) {
+            sb.append(result).append('\n');
+        }
         System.out.println(sb);
-
     }
 
-    public static void backtracking(int depth, int[] elements) {
-
+    static void backTrack(int depth, int idx, int[] elements) {
         if (depth == m) {
-            setSb.setLength(0);
-            for (int i = 0; i < m; i++) setSb.append(elements[i]).append('-');
-            if (permutationSet.add(setSb.toString())) {
-                for (int i = 0; i < m; i++) sb.append(elements[i]).append(' ');
-                sb.append('\n');
+            for (int element: elements) {
+                sb.append(element).append(' ');
             }
+            resultSet.add(sb.toString());
+            sb.setLength(0);
             return;
         }
 
-        for (int i = 0; i < n; i++) {
+        for (int i = idx; i < n; i++) {
             if (visit[i]) continue;
-            if (depth != 0) {
-                if (elements[depth - 1] > inputIntArr[i]) continue;
-            }
             visit[i] = true;
-            elements[depth] = inputIntArr[i];
-            backtracking(depth + 1, elements);
+            elements[depth] = inputArr[i];
+            backTrack(depth + 1, i, elements);
             visit[i] = false;
         }
     }
 
-
-
-    public static void main(String[] args) throws IOException{
+    public static void main(String[] args) throws Exception{
         input();
         pro();
     }
-
 }
