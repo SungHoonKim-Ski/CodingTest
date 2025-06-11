@@ -1,36 +1,43 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+
 
 public class Main {
 
-    static int N, M;
-    static int[] Prev_Val;
-    static StringBuffer sb;
-    public static void main(String[] args) throws IOException {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-        Scanner sc = new Scanner(new InputStreamReader(System.in));
-        N = sc.nextInt();
-        M = sc.nextInt();
-        sb = new StringBuffer();
-        Prev_Val = new int[M + 1];
-        recur_func(1);
+    static int n, m;
 
+    static void input() throws Exception {
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+    }
+
+    public static void pro() {
+        backTrack(0, 1,  new int[m]);
         System.out.println(sb);
     }
 
-    static void recur_func(int depth) {
-        if (depth == M + 1) {
-            for (int i = 1; i <= M; i++) {
-                sb.append(Prev_Val[i]).append(' ');
+    static void backTrack(int depth, int index, int[] elements) {
+        if (depth == m) {
+            for (int element: elements) {
+                sb.append(element).append(' ');
             }
             sb.append('\n');
-        }else {
-            for (int i = 1; i <= N; i++) {
-                Prev_Val[depth] = i;
-                recur_func(depth + 1);
-            }
+            return;
         }
+
+        for (int i = 1; i <= n; i++) {
+            elements[depth] = i;
+            backTrack(depth + 1, i, elements);
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+        input();
+        pro();
     }
 }
