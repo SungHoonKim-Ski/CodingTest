@@ -1,31 +1,34 @@
 import java.io.*;
 import java.util.*;
-import java.lang.Math;
 
 public class Main {
 
-    static FastReader scan = new FastReader();
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-    static int N;
-    static int[] dp,inputArr;
+    static int n, max;
+    static int[] sequence;
+    static int[] dp;
 
-    static void input() {
-        N = scan.nextInt();
-        dp = new int[N];
-        inputArr = new int[N];
-        for (int i = 0; i < N; i++) inputArr[i] = scan.nextInt();
+    static void input() throws Exception {
+        n = Integer.parseInt(br.readLine());
+        sequence = new int[n + 1];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 1; i <= n; i++) {
+            sequence[i] = Integer.parseInt(st.nextToken());
+        }
     }
 
-    static void pro() {
+    public static void pro() {
+        dp = new int[n + 1];
+        int max = 0;
 
-        int max = 1;
-        for (int i = 0; i < N; i++) {
+        for (int i = n; i >= 1; i--) {
             dp[i] = 1;
-            for (int j = 0; j < i; j++) {
-                if (inputArr[j] < inputArr[i]) {
-                    dp[i] = Math.max(dp[i], dp[j] + 1);
-                }
+            for (int j = i; j <= n; j++) {
+                if (sequence[i] >= sequence[j]) continue;
+                dp[i] = Math.max(dp[i], dp[j] + 1);
             }
             max = Math.max(max, dp[i]);
         }
@@ -33,55 +36,8 @@ public class Main {
         System.out.println(max);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception{
         input();
         pro();
-    }
-
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
     }
 }
