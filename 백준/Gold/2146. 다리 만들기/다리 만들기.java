@@ -76,12 +76,19 @@ public class Main {
                 int nx = cur[1] + dx[i];
 
                 if (ny < 0 || nx < 0 || ny >= n || nx >= n) continue;
-                if (bridgeVisit[ny][nx]) continue;
 
+                if (bridgeVisit[ny][nx]) continue;
+                bridgeVisit[ny][nx] = true;
+                
+                if (map[ny][nx] == curIdx) {
+                    que.add(new int[] {ny, nx, 0});
+                    visit[ny][nx] = true;
+                    continue;
+                }
+                
                 int nMove = cur[2];
                 if (curIdx != map[ny][nx]) nMove++;
                 
-                bridgeVisit[ny][nx] = true;
                 que.add(new int[] {ny, nx, nMove});
             }
         }
