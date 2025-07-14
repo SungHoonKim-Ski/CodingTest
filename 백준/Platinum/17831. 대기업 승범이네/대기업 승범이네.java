@@ -43,27 +43,23 @@ public class Main {
         dp[cur][use] = 0;
 
         HashMap<Integer, Integer> usedMap = new HashMap<>();
-        HashMap<Integer, Integer> notUsedMap = new HashMap<>();
 
         for (int child : tree[cur]) {
             int usedRes = recur(child, 1);
             usedMap.put(child, usedRes);
             dp[cur][use] += usedRes;
-
-            int notUsedRes = recur(child, 0);
-            notUsedMap.put(child, notUsedRes);
         }
 
         if (use == 1) {
             int max = dp[cur][use];
             for (int child : tree[cur]) {
-                int comp = dp[cur][use] - usedMap.get(child) + notUsedMap.get(child) + cost[cur] * cost[child];
+                int comp = dp[cur][use] - usedMap.get(child) + recur(child, 0) + cost[cur] * cost[child];
                 max = Math.max(comp, max);
             }
-            return dp[cur][use] = max;
-        } else {
-            return dp[cur][use];
+            dp[cur][use] = max;
         }
+        
+        return dp[cur][use];
     }
 
     public static void main(String[] args) throws Exception{
