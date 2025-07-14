@@ -42,23 +42,24 @@ public class Main {
         if (dp[cur][use] != -1) return dp[cur][use];
         dp[cur][use] = 0;
 
-        HashMap<Integer, Integer> usedMap = new HashMap<>();
+        List<Integer> usedList = new ArrayList<>();
 
         for (int child : tree[cur]) {
             int usedRes = recur(child, 1);
-            usedMap.put(child, usedRes);
+            usedList.add(usedRes);
             dp[cur][use] += usedRes;
         }
 
         if (use == 1) {
             int max = dp[cur][use];
-            for (int child : tree[cur]) {
-                int comp = dp[cur][use] - usedMap.get(child) + recur(child, 0) + cost[cur] * cost[child];
+            for (int i = 0; i < tree[cur].size(); i++) {
+                int child = tree[cur].get(i);
+                int comp = dp[cur][use] - usedList.get(i) + recur(child, 0) + cost[cur] * cost[child];
                 max = Math.max(comp, max);
             }
             dp[cur][use] = max;
         }
-        
+
         return dp[cur][use];
     }
 
