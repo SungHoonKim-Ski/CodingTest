@@ -51,12 +51,15 @@ public class Main {
         }
 
         if (use == 1) {
-            int max = dp[cur][use];
+            int usedCost = dp[cur][use];
+            int max = usedCost;
+            
             for (int i = 0; i < tree[cur].size(); i++) {
                 int child = tree[cur].get(i);
-                int comp = dp[cur][use] - usedList.get(i) + recur(child, 0) + cost[cur] * cost[child];
+                int comp = usedCost - usedList.get(i) + recur(child, 0) + cost[cur] * cost[child];
                 max = Math.max(comp, max);
             }
+            
             dp[cur][use] = max;
         }
 
