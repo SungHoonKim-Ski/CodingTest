@@ -1,59 +1,88 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-class Main {
+public class Main {
 
-    public static void main(String[] args) throws Exception {
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        st = new StringTokenizer(br.readLine(), " ");
+    static final int LENGTH = 1 << 20;
+    static final int SIZE = 1 << 21;
 
-        int n = Integer.parseInt(st.nextToken());
-        int m = Integer.parseInt(st.nextToken());
-        int k = Integer.parseInt(st.nextToken());
+    static int n, m, k;
+    static long[] arr, tree;
 
-        long[] sumSegTree = new long[2 * n];
+    static void input() throws Exception {
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
 
+        arr = new long[n];
         for (int i = 0; i < n; i++) {
-            long input = Long.parseLong(br.readLine());
-            sumSegTree[i + n] = input;
+            arr[i] = Long.parseLong(br.readLine());
         }
+    }
 
-        for (int i = n-1; i != 0; i--) {
-            sumSegTree[i] = sumSegTree[i << 1] + sumSegTree[i << 1 | 1];
-        }
+    public static void pro() throws IOException {
+        makeTree();
+        int query = m + k;
 
-        for (int i = 0; i < m + k; i++) {
-            st = new StringTokenizer(br.readLine(), " ");
+        while (query-- > 0) {
+            st = new StringTokenizer(br.readLine());
 
-            if (st.nextToken().charAt(0) == '1') {
-                int idx = Integer.parseInt(st.nextToken()) - 1;
-                long num = Long.parseLong(st.nextToken());
-                sumSegTree[idx += n] = num;
-
-                while ((idx >>= 1) > 0) {
-                    sumSegTree[idx] = sumSegTree[idx << 1] + sumSegTree[idx << 1 | 1];
-                }
-            }else {
-                int l = Integer.parseInt(st.nextToken()) - 1;
-                int r = Integer.parseInt(st.nextToken());
-
-                long sum = 0;
-
-                for (l += n, r += n; l != r; l >>= 1, r >>= 1) {
-                    if ((l & 1) == 1) {
-                        sum += sumSegTree[l++];
-                    }
-                    if ((r & 1) == 1) {
-                        sum += sumSegTree[--r];
-                    }
-                }
-                System.out.println(sum);
+            int cmd = Integer.parseInt(st.nextToken());
+            if (cmd == 1) {
+                int a = Integer.parseInt(st.nextToken());
+                long b = Long.parseLong(st.nextToken());
+                update(a - 1, b);
+            } else {
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
+                sb.append(
+                    get(1, 0, LENGTH - 1, a - 1, b - 1)
+                ).append('\n');
             }
         }
+        System.out.println(sb);
+    }
+
+    static void update(int idx, long num) {
+        tree[LENGTH + idx] = num;
+
+        int change = (LENGTH + idx) / 2;
+        while (change != 0) {
+            tree[change] = tree[change * 2] + tree[change * 2 + 1];
+            change /= 2;
+        }
+    }
+
+    static long get(int idx, int s, int e, int ts, int te) {
+        if (s > te || e < ts) return 0;
+        if (ts <= s && e <= te) return tree[idx];
+
+        int mid = (s + e) / 2;
+        long l = get(idx * 2, s, mid, ts, te);
+        long r = get(idx * 2 + 1, mid + 1, e, ts, te);
+
+        return l + r;
+    }
+
+    static void makeTree() {
+        tree = new long[SIZE];
+
+        for (int i = 0; i < n; i++) {
+            tree[LENGTH + i] = arr[i];
+        }
+
+        for (int i = LENGTH - 1; i > 0; i--) {
+            tree[i] = tree[i * 2] + tree[i * 2 + 1];
+        }
+    }
+
+    public static void main(String[] args) throws Exception{
+        input();
+        pro();
     }
 }
