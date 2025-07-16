@@ -1,58 +1,82 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
-class Main {
+public class Main {
 
-    static long[] maxSegTree;
-    static long[] minSegTree;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
+    static StringTokenizer st;
 
-    public static void main(String[] args) throws Exception {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        st = new StringTokenizer(br.readLine(), " ");
-        int n = Integer.parseInt(st.nextToken());
-        int p = Integer.parseInt(st.nextToken());
+    static int[] maxTree, minTree;
+    static int[] arr;
+    static int n, m;
+    static int LENGTH = 1 << 19;
+    static int SIZE = 1 << 20;
 
-        minSegTree = new long[2 * n];
-        maxSegTree = new long[2 * n];
+
+    static void input() throws Exception {
+        st = new StringTokenizer(br.readLine());
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+
+        arr = new int[n];
+        for (int i = 0; i < n; i++) {
+            arr[i] = Integer.parseInt(br.readLine());
+        }
+    }
+
+    public static void pro() throws IOException {
+        makeTree();
+        while (m-- > 0) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken()) - 1;
+            int b = Integer.parseInt(st.nextToken()) - 1;
+            sb.append(getMin(1, 0, LENGTH - 1, a, b)).append(' ');
+            sb.append(getMax(1, 0, LENGTH - 1, a, b)).append('\n');
+        }
+        System.out.println(sb);
+    }
+
+    static int getMax(int idx, int s, int e, int ts, int te) {
+        if (ts > e || te < s) return 0;
+        if (ts <= s && e <= te) return maxTree[idx];
+
+        int mid = (s + e) / 2;
+        int l = getMax(idx * 2, s, mid, ts, te);
+        int r = getMax(idx * 2 + 1, mid + 1, e, ts, te);
+
+        return Math.max(l, r);
+    }
+
+    static int getMin(int idx, int s, int e, int ts, int te) {
+        if (ts > e || te < s) return Integer.MAX_VALUE;
+        if (ts <= s && e <= te) return minTree[idx];
+
+        int mid = (s + e) / 2;
+        int l = getMin(idx * 2, s, mid, ts, te);
+        int r = getMin(idx * 2 + 1, mid + 1, e, ts, te);
+
+        return Math.min(l, r);
+    }
+
+    static void makeTree() {
+        maxTree = new int[SIZE];
+        minTree = new int[SIZE];
+        Arrays.fill(minTree, Integer.MAX_VALUE);
 
         for (int i = 0; i < n; i++) {
-            long input = Long.parseLong(br.readLine());
-            minSegTree[i + n] = input;
-            maxSegTree[i + n] = input;
+            maxTree[LENGTH + i] = arr[i];
+            minTree[LENGTH + i] = arr[i];
         }
 
-        for (int i = n-1; i != 0; i--) {
-            minSegTree[i] = Math.min(minSegTree[i << 1], minSegTree[i << 1 | 1]);
-            maxSegTree[i] = Math.max(maxSegTree[i << 1], maxSegTree[i << 1 | 1]);
+        for (int i = LENGTH - 1; i > 0; i--) {
+            maxTree[i] = Math.max(maxTree[i * 2], maxTree[i * 2 + 1]);
+            minTree[i] = Math.min(minTree[i * 2], minTree[i * 2 + 1]);
         }
+    }
 
-        for (int i = 0; i < p; i++) {
-            st = new StringTokenizer(br.readLine(), " ");
-            int l = Integer.parseInt(st.nextToken()) - 1;
-            int r = Integer.parseInt(st.nextToken());
-
-            long max = -1;
-            long min = Long.MAX_VALUE;
-
-            for (l += n, r += n; l != r; l >>= 1, r >>= 1) {
-                if ((l & 1) == 1) {
-                    max = Math.max(max, maxSegTree[l]);
-                    min = Math.min(min, minSegTree[l++]);
-                }
-                if ((r & 1) == 1) {
-                    max = Math.max(max, maxSegTree[--r]);
-                    min = Math.min(min, minSegTree[r]);
-                }
-            }
-            bw.append(String.valueOf(min)).append(' ').append(String.valueOf(max)).append('\n');
-        }
-        bw.flush();
-        bw.close();
-        br.close();
+    public static void main(String[] args) throws Exception{
+        input();
+        pro();
     }
 }
