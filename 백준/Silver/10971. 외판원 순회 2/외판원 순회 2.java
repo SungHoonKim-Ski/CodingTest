@@ -27,11 +27,9 @@ public class Main {
     public static void pro() {
         min = Integer.MAX_VALUE;
         visit = new boolean[n];
-        for (int i = 0; i < n; i++) {
-            visit[i] = true;
-            recur(1, i, i, 0);
-            visit[i] = false;
-        }
+
+        visit[0] = true;
+        recur(1, 0, 0, 0);
 
         System.out.println(min);
     }
