@@ -10,8 +10,9 @@ public class Main {
     static int n, m, k;
 
     static int[][] feed, add;
-    static PriorityQueue<Integer>[][] treeQue;
-    static List<Integer>[][] spreadTreeList;
+    static ArrayList<Integer>[][] treeList;
+    static Deque<Integer>[][] treeQue;
+    static int[][] spread;
 
     static void input() throws Exception {
         st = new StringTokenizer(br.readLine());
@@ -20,12 +21,13 @@ public class Main {
         k = Integer.parseInt(st.nextToken());
 
         feed = new int[n + 1][n + 1];
-        treeQue = new PriorityQueue[n + 1][n + 1];
-        spreadTreeList = new ArrayList[n + 1][n + 1];
+        treeQue = new ArrayDeque[n + 1][n + 1];
+        treeList = new ArrayList[n + 1][n + 1];
+        spread = new int[n + 1][n + 1];
         for (int i = 1; i <= n; i++)
             for (int j = 1; j <= n; j++) {
-                treeQue[i][j] = new PriorityQueue<Integer>();
-                spreadTreeList[i][j] = new ArrayList<Integer>();
+                treeQue[i][j] = new ArrayDeque<Integer>();
+                treeList[i][j] = new ArrayList<>();
                 feed[i][j] = 5;
             }
 
@@ -43,11 +45,18 @@ public class Main {
             int c = Integer.parseInt(st.nextToken());
             int age = Integer.parseInt(st.nextToken());
 
-            treeQue[r][c].add(age);
+            treeList[r][c].add(age);
         }
     }
 
     public static void pro() {
+        for (int i = 1; i <= n; i++)
+            for (int j = 1; j <= n; j++) {
+                Collections.sort(treeList[i][j]);
+                treeQue[i][j].addAll(treeList[i][j]);
+            }
+
+
         while (k-- > 0) {
             springSummer();
             autumn();
@@ -65,7 +74,7 @@ public class Main {
     static void springSummer() {
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
-                PriorityQueue<Integer> curTreeQue = treeQue[i][j];
+                Deque<Integer> curTreeQue = treeQue[i][j];
                 List<Integer> growTree = new ArrayList<>();
                 List<Integer> deadTree = new ArrayList<>();
 
@@ -95,26 +104,26 @@ public class Main {
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
-                PriorityQueue<Integer> curTreeQue = treeQue[i][j];
-                List<Integer> spread  = new ArrayList<>();
+                Deque<Integer> curTreeQue = treeQue[i][j];
                 for (int curTree : curTreeQue) {
-                    if (curTree % 5 == 0) spread.add(1);
-                }
-
-                for (int k = 0; k < 8; k++) {
-                    int nr = i + dr[k];
-                    int nc = j + dc[k];
-
-                    if (nr <= 0 || nc <= 0 || nr > n || nc > n) continue;
-                    spreadTreeList[nr][nc].addAll(spread);
+                    if (curTree % 5 == 0) spread[i][j]++;
                 }
             }
         }
 
         for (int i = 1; i <= n; i++) {
             for (int j = 1; j <= n; j++) {
-                treeQue[i][j].addAll(spreadTreeList[i][j]);
-                spreadTreeList[i][j].clear();
+                if (spread[i][j] == 0) continue;
+                for (int k = 0; k < 8; k++) {
+                    int nr = i + dr[k];
+                    int nc = j + dc[k];
+
+                    if (nr <= 0 || nc <= 0 || nr > n || nc > n) continue;
+                    for (int x = 0; x < spread[i][j]; x++) {
+                        treeQue[nr][nc].addFirst(1);
+                    }
+                }
+                spread[i][j] = 0;
             }
         }
     }
