@@ -52,18 +52,17 @@ public class Main {
 
     static void dijkstra(int start) {
         cost[start] = 0;
-        PriorityQueue<int[]> que = new PriorityQueue<>((o1, o2) -> o1[1] - o2[1]);
-        que.add(new int[] {start, 0});
+        Queue<Integer> que = new ArrayDeque<>();
+        que.add(start);
 
         while (!que.isEmpty()) {
-            int[] cur = que.poll();
-            if (cost[cur[0]] != cur[1]) continue;
-            if (cur[1] > k) return;
+            int cur = que.poll();
+            if (cost[cur] > k) return;
 
-            for (int next : graph[cur[0]]) {
+            for (int next : graph[cur]) {
                 if (cost[next] != MAX) continue;
-                cost[next] = cur[1] + 1;
-                que.add(new int[] {next, cost[next]});
+                cost[next] = cost[cur] + 1;
+                que.add(next);
             }
         }
     }
