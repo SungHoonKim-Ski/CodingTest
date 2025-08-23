@@ -1,60 +1,52 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.StringTokenizer;
+import java.io.*;
+import java.util.*;
 
 public class Main {
 
-    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-    static StringBuffer sb = new StringBuffer();
     static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringBuilder sb = new StringBuilder();
 
-    static int[][] cost, dp;
     static int n;
+    static int[][] dp;
+    static int[][] houses;
 
     static void input() throws IOException {
-
         n = Integer.parseInt(br.readLine());
-        cost = new int[n][3];
-
+        houses = new int[n][3];
         for (int i = 0; i < n; i++) {
             st = new StringTokenizer(br.readLine());
-            for (int j = 0; j < 3; j++) {
-                cost[i][j] = Integer.parseInt(st.nextToken());
+            for (int c = 0; c < 3; c++) {
+                houses[i][c] = Integer.parseInt(st.nextToken());
             }
         }
+    }
 
+    static void pro() {
         dp = new int[n][3];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(dp[i], Integer.MAX_VALUE);
-        }
+        for (int i = 0; i < n; i++) Arrays.fill(dp[i], -1);
+        
+        int min = recur(0, 1);
+        min = Math.min(min, recur(0, 2));
+        min = Math.min(min, recur(0, 0));
+
+        System.out.println(min);
     }
 
-    static void pro() throws IOException {
-
-        dp[0][0] = cost[0][0];
-        dp[0][1] = cost[0][1];
-        dp[0][2] = cost[0][2];
-
-        for (int i = 1; i < n; i++) {
-            for (int j = 0; j < 3; j++) {
-                for (int k = 0; k < 3; k++) {
-                    if (j == k) continue;
-                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][k]);
-                }
-                dp[i][j] += cost[i][j];
-            }
+    static int recur(int depth, int cur) {
+        if (depth == n) return 0;
+        if (dp[depth][cur] != -1) return dp[depth][cur];
+        
+        dp[depth][cur] = Integer.MAX_VALUE;
+        for (int i = 0; i < 3; i++) {
+            if (i == cur) continue;
+            dp[depth][cur] = Math.min(dp[depth][cur], recur(depth + 1, i) + houses[depth][cur]);
         }
-
-        System.out.println(Math.min(Math.min(dp[n - 1][0], dp[n - 1][1]), dp[n - 1][2]));
-    }
-
+        return dp[depth][cur];
+    } 
 
     public static void main(String[] args) throws IOException {
         input();
         pro();
     }
-
 }
