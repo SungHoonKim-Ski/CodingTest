@@ -60,15 +60,14 @@ public class Main {
                     if (nx < 0 || ny < 0 || nx >= n || ny >= n) break;
                     if (map[nx][ny] == 'B') break;
                     if (dist[nx][ny] < nMove) break;
-                    if (dist[nx][ny] == nMove) {
-                        if (map[nx][ny] == 'W') break;
-                        else continue;
-                    }
                     if (map[nx][ny] == 'W') {
-                        que.add(new int[] {nx, ny, nMove});
-                        dist[nx][ny] = nMove;
+                        if (dist[nx][ny] != nMove) {
+                            que.add(new int[] {nx, ny, nMove});
+                            dist[nx][ny] = nMove;
+                        }
                         break;
                     }
+                    if (dist[nx][ny] == nMove) continue;
                     if (map[nx][ny] == '.') {
                         que.add(new int[] {nx, ny, nMove});
                         dist[nx][ny] = nMove;
