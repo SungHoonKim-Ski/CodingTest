@@ -53,13 +53,15 @@ public class Main {
                 if (!available[nx * m + ny]) continue;
 
                 int nIdx = nx * m + ny;
-                if (find(idx) == find(nIdx)) continue;
+                int nParent = find(nIdx);
+                if (idx == nParent) continue;
 
-                sum -= value[find(nIdx)];
+                sum -= value[nParent];
+                value[idx] ^= value[nParent];
                 union(idx, nIdx);
             }
 
-            sum += value[find(idx)];
+            sum += value[idx];
             ans = Math.max(ans, sum);
         }
 
@@ -73,7 +75,7 @@ public class Main {
         if (pa == pb) return;
 
         parent[pb] = pa;
-        value[pa] ^= value[pb];
+        return;
     }
 
     static int find(int a) {
