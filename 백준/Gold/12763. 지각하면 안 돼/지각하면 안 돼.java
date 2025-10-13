@@ -58,10 +58,14 @@ public class Main {
         Queue<Info> que = new ArrayDeque<>();
 
         long[] maxCost = new long[n + 1];
+        HashSet<Long>[] visitSet = new HashSet[n + 1];
+        for (int i = 1; i <= n; i++) visitSet[i] = new HashSet<>();
+
         Arrays.fill(maxCost, Long.MAX_VALUE);
 
         que.add(new Info(1, 0, 0));
         maxCost[1] = 0;
+        visitSet[1].add(0L);
 
         while (!que.isEmpty()) {
             Info cur = que.poll();
@@ -71,6 +75,8 @@ public class Main {
                 long nDist = cur.dist + next.dist;
 
                 if (nDist > t || nCost > m) continue;
+                if (!visitSet[next.idx].add(nCost)) continue;
+
                 if (maxCost[next.idx] > nCost) {
                     maxCost[next.idx] = nCost;
                 }
