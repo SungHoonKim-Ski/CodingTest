@@ -12,11 +12,11 @@ public class Main {
     }
 
     static class Info {
-        int idx;
+        int idx, prev;
         long dist, cost;
 
-        Info(int idx, long dist, long cost) {
-            this.idx = idx; this.dist = dist; this.cost = cost;
+        Info(int idx, long dist, long cost, int prev) {
+            this.idx = idx; this.dist = dist; this.cost = cost; this.prev = prev;
         }
     }
 
@@ -58,14 +58,11 @@ public class Main {
         Queue<Info> que = new ArrayDeque<>();
 
         long[] maxCost = new long[n + 1];
-        HashSet<Long>[] visitSet = new HashSet[n + 1];
-        for (int i = 1; i <= n; i++) visitSet[i] = new HashSet<>();
 
         Arrays.fill(maxCost, Long.MAX_VALUE);
 
-        que.add(new Info(1, 0, 0));
+        que.add(new Info(1, 0, 0, -1));
         maxCost[1] = 0;
-        visitSet[1].add(0L);
 
         while (!que.isEmpty()) {
             Info cur = que.poll();
@@ -75,13 +72,13 @@ public class Main {
                 long nDist = cur.dist + next.dist;
 
                 if (nDist > t || nCost > m) continue;
-                if (!visitSet[next.idx].add(nCost)) continue;
+                if (next.idx == cur.prev) continue;
 
                 if (maxCost[next.idx] > nCost) {
                     maxCost[next.idx] = nCost;
                 }
 
-                que.add(new Info(next.idx, nDist, nCost));
+                que.add(new Info(next.idx, nDist, nCost, cur.idx));
             }
         }
 
