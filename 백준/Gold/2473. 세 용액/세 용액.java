@@ -2,96 +2,54 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static FastReader scan = new FastReader();
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
     static StringBuilder sb = new StringBuilder();
 
-    static int N, v1, v2, v3;
-    static long best_sum = Long.MAX_VALUE;
-    static int[] A;
+    static int n;
+    static long[] arr;
 
-    static void input() {
-        N = scan.nextInt();
-        A = new int[N + 1];
-        for (int i = 1; i <= N; i++) {
-            A[i] = scan.nextInt();
-        }
+    static void input() throws IOException{
+        n = Integer.parseInt(br.readLine());
+
+        st = new StringTokenizer(br.readLine());
+        arr = new long[n];
+        for (int i = 0; i < n; i++) arr[i] = Integer.parseInt(st.nextToken());
     }
-    static void func(int cur_idx) {
-        int L = cur_idx + 1, R = N;
-        int cur = A[cur_idx];
-        while (L < R) {
-            long sum = (long)A[L] + A[R] + cur;
-            if (Math.abs(sum) < best_sum){
-                best_sum = Math.abs(sum);
-                v1 = cur;
-                v2 = A[L];
-                v3 = A[R];
-            }
-            if (A[L] + A[R] > -cur) R--;
-            else L++;
-        }
-    }
+
     static void pro() {
+        Arrays.sort(arr);
+        long min = Long.MAX_VALUE;
+        long[] elements = new long[3];
 
-        Arrays.sort(A, 1, N + 1);
-        for (int i = 1; i <= N - 2; i++) {
-            func(i);
+        for (int i = 0; i < n - 2; i++) {
+            int left = i + 1;
+            int right = n - 1;
+
+            while (left < right) {
+                long sum = arr[i] + arr[left] + arr[right];
+                long absSum = Math.abs(sum);
+                if (absSum < min) {
+                    min = absSum;
+                    elements[0] = arr[i];
+                    elements[1] = arr[left];
+                    elements[2] = arr[right];
+//                    System.out.println(min + " : " +Arrays.toString(elements));
+                }
+
+                if (sum <= 0) left++;
+                else right--;
+            }
         }
-
-        sb.append(v1).append(' ').append(v2).append(' ').append(v3);
+        sb.append(elements[0]).append(' ');
+        sb.append(elements[1]).append(' ');
+        sb.append(elements[2]);
 
         System.out.println(sb);
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         input();
         pro();
-    }
-
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
     }
 }
