@@ -33,29 +33,31 @@ public class Main {
             for (int j = 0; j < 4; j++)
                 for (int k = 0; k <= a; k++) Arrays.fill(dp[i][j][k], -1);
 
-        System.out.println(recur(0, 0, 0, 0));
+        System.out.println(recur(0, 0, new int[4]));
     }
 
-    static int recur(int depth, int prev, int aCnt, int bCnt) {
+    static int recur(int depth, int prev, int[] cnt) {
+        int aSum = cnt[3];
+        int bSum = cnt[0] + cnt[1];
+
         if (depth == n) {
-            if (bCnt < b) return Integer.MIN_VALUE;
+            if (bSum < b) return Integer.MIN_VALUE;
 
             return 0;
         }
-        // 정 소 휴 요
-        if (dp[depth][prev][aCnt][bCnt] != -1) return dp[depth][prev][aCnt][bCnt];
 
+        if (dp[depth][prev][aSum][bSum] != -1) return dp[depth][prev][aSum][bSum];
         int max = Integer.MIN_VALUE;
-        max = Math.max(max, recur(depth + 1, 0, aCnt, bCnt + 1) + value[depth][0]);
-        max = Math.max(max, recur(depth + 1, 1, aCnt, bCnt + 1) + value[depth][1]);
-        if (prev != 2) {
-            max = Math.max(max, recur(depth + 1, 2, aCnt, bCnt) + value[depth][2]);
-        }
-        if (aCnt < a) {
-            max = Math.max(max, recur(depth + 1, 3, aCnt + 1, bCnt) + value[depth][3]);
+
+        for (int i = 0; i < 4; i++) {
+            if (prev == 2 && i == 2) continue;
+            if (i == 3 && aSum == a) continue;
+            cnt[i]++;
+            max = Math.max(max, recur(depth + 1, i, cnt) + value[depth][i]);
+            cnt[i]--;
         }
 
-        return dp[depth][prev][aCnt][bCnt] = max;
+        return dp[depth][prev][aSum][bSum] = max;
     }
 
     public static void main(String[] args) throws IOException {
