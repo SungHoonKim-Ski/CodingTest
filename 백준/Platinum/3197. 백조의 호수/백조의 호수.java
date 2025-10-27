@@ -8,14 +8,15 @@ class Main {
     static StringTokenizer st;
     static int r, c, day;
     static char[][] map;
-    static boolean[][] visit, meetVisit;
-    static int[][] loc;
+    static boolean[][] visit, swanVisit;
+    static int[][] swans;
 
-    static ArrayList<int[]> nextMelt;
-    static Queue<int[]> curMelt, que, nextQue;
+    static ArrayList<int[]> meltList;
+    static Queue<int[]> prevMeltQue, que, nextSwanQue;
 
     static int[] dy = {0, 1, 0, -1};
     static int[] dx = {1, 0, -1, 0};
+
     static void input() throws IOException{
 
         st = new StringTokenizer(br.readLine());
@@ -23,25 +24,24 @@ class Main {
         c = Integer.parseInt(st.nextToken());
 
         map = new char[r][c];
-        meetVisit = new boolean[r][c];
+        swanVisit = new boolean[r][c];
         visit = new boolean[r][c];
-        nextMelt = new ArrayList<>();
-        nextQue = new ArrayDeque<>();
+        meltList = new ArrayList<>();
+        nextSwanQue = new ArrayDeque<>();
 
-        int locCnt = 0;
-        loc = new int[2][2];
+        int swanCnt = 0;
+        swans = new int[2][2];
         for (int i = 0; i < r; i++) {
             char[] str = br.readLine().toCharArray();
             for (int j = 0; j < c; j++) {
                 map[i][j] = str[j];
                 if (str[j] == 'L') {
                     map[i][j] = '.';
-                    loc[locCnt][0] = i;
-                    loc[locCnt++][1] = j;
+                    swans[swanCnt++] = new int[] {i, j};
                 }
 
                 if (map[i][j] == '.') {
-                    nextMelt.add(new int[] {i, j});
+                    meltList.add(new int[] {i, j});
                 }
             }
         }
@@ -49,75 +49,69 @@ class Main {
 
     static void pro() {
 
-        visit = new boolean[r][c];
-        meetVisit = new boolean[r][c];
-
-        nextQue.add(new int[] {loc[0][0], loc[0][1]});
-        meetVisit[loc[0][0]][loc[0][1]] = true;
-
-        while (true) {
+        while (!canMeet()) {
             day++;
-            bfs();
-//            for (int i = 0; i < r; i++) {
-//                System.out.println(Arrays.toString(map[i]));
-//            }
-//            System.out.println("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-            if (canMeet()) break;
+            melt();
         }
+
         System.out.println(day);
     }
-    static void bfs() {
 
-        curMelt = new ArrayDeque<>(nextMelt);
-        nextMelt.clear();
+    static void init() {
+        nextSwanQue.add(new int[] {swans[0][0], swans[0][1]});
+        swanVisit[swans[0][0]][swans[0][1]] = true;
+    }
 
-        while (!curMelt.isEmpty()) {
+    static void melt() {
+        prevMeltQue = new ArrayDeque<>(meltList);
+        meltList.clear();
 
-            int[] cur = curMelt.poll();
+        while (!prevMeltQue.isEmpty()) {
+
+            int[] cur = prevMeltQue.poll();
 
             for (int x = 0; x < 4; x++) {
                 int ny = dy[x] + cur[0];
                 int nx = dx[x] + cur[1];
 
-                if (ny == -1 || nx == -1 || ny == r || nx == c) continue;
+                if (outOfMap(ny, nx)) continue;
                 if (visit[ny][nx]) continue;
 
                 visit[ny][nx] = true;
 
                 if (map[ny][nx] == 'X') {
-                    nextMelt.add(new int[] {ny, nx});
+                    meltList.add(new int[] {ny, nx});
                 } else {
-                    curMelt.add(new int[] {ny, nx});
+                    prevMeltQue.add(new int[] {ny, nx});
                 }
             }
         }
 
-        for (int[] cur : nextMelt) {
+        for (int[] cur : meltList) {
             map[cur[0]][cur[1]] = '.';
         }
     }
 
     static boolean canMeet() {
-
-        que = new ArrayDeque<>(nextQue);
-        nextQue.clear();
+        que = new ArrayDeque<>(nextSwanQue);
+        nextSwanQue.clear();
 
         while (!que.isEmpty()) {
             int[] cur = que.poll();
-            if (cur[0] == loc[1][0] && cur[1] == loc[1][1]) return true;
+            if (swanVisit[swans[1][0]][swans[1][1]]) return true;
 
             for (int i = 0; i < 4; i++) {
                 int ny = dy[i] + cur[0];
                 int nx = dx[i] + cur[1];
 
-                if (ny == -1 || nx == -1 || ny == r || nx == c) continue;
-                if (meetVisit[ny][nx]) continue;
+                if (outOfMap(ny, nx)) continue;
+                if (swanVisit[ny][nx]) continue;
 
                 if (map[ny][nx] == '.') {
-                    meetVisit[ny][nx] = true;
+                    swanVisit[ny][nx] = true;
                     que.add(new int[] {ny, nx});
                 } else {
-                    nextQue.add(new int[] {cur[0], cur[1]});
+                    nextSwanQue.add(new int[] {cur[0], cur[1]});
                 }
             }
         }
@@ -125,9 +119,13 @@ class Main {
         return false;
     }
 
+    static boolean outOfMap(int curY, int curX) {
+        return curY < 0 || curX < 0 || curY >= r || curX >= c;
+    }
 
     public static void main(String[] args) throws Exception{
         input();
+        init();
         pro();
     }
 }
