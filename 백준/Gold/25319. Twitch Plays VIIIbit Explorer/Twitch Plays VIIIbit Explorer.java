@@ -8,8 +8,7 @@ public class Main {
 
     static int n, m;
     static char[][] map;
-    static int[] alphaCnt;
-    static ArrayList<int[]>[] alpha;
+    static ArrayDeque<int[]>[] alpha;
     static String idStr;
     static char[] candIdArr;
     static int[] loc;
@@ -36,13 +35,12 @@ public class Main {
 
         for (char findChar : candIdArr) {
             int i = findChar - 'a';
-            int[] goal = alpha[i].get(alpha[i].size() - 1);
+            int[] goal = alpha[i].poll();
 
             find(loc[0], loc[1], goal[0], goal[1]);
 
             loc = goal;
             sb.append('P');
-            alpha[i].remove(alpha[i].size() - 1);
         }
 
         find(loc[0], loc[1], n - 1, m - 1);
@@ -77,9 +75,9 @@ public class Main {
     }
 
     static int calCandId() {
-        alpha = new ArrayList[30];
+        alpha = new ArrayDeque[30];
         for (int i = 0; i < 30; i++) {
-            alpha[i] = new ArrayList<>();
+            alpha[i] = new ArrayDeque<>();
         }
 
         for (int i = 0; i < n; i++) {
