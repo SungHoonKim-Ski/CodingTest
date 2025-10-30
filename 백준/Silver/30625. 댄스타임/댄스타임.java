@@ -40,25 +40,18 @@ public class Main {
         long sum = 0;
 
         if (arr[depth][1] == 0) {
-            for (int i = 1; i <= m; i++) {
-                if (arr[depth][0] == i) continue;
-                sum += recur(depth + 1, wrong + 1);
-                sum %= MOD;
-            }
+            sum += (m - 1) * recur(depth + 1, wrong + 1);
             sum += recur(depth + 1, wrong);
+            
             sum %= MOD;
         } else {
+            sum += (m - 1) * recur(depth + 1, wrong);
             sum += recur(depth + 1, wrong + 1);
+            
             sum %= MOD;
-
-            for (int i = 1; i <= m; i++) {
-                if (arr[depth][0] == i) continue;
-                sum += recur(depth + 1, wrong);
-                sum %= MOD;
-            }
         }
 
-        return dp[depth][wrong] = sum % MOD;
+        return dp[depth][wrong] = sum;
     }
 
 
