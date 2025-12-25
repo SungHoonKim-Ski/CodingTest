@@ -9,7 +9,7 @@ public class Main {
 
     static int n, m, k, s, p, q;
 
-    static boolean[] visit;
+    static boolean[] visit, zombie;
     static long[] dist;
     static int[] cost;
     static ArrayList<Integer>[] graph;
@@ -35,9 +35,11 @@ public class Main {
         q = Integer.parseInt(st.nextToken());
 
         zombieSet = new HashSet<>();
+        zombie = new boolean[n + 1];
         for (int i = 0; i < k; i++) {
             int z = Integer.parseInt(br.readLine());
             zombieSet.add(z);
+            zombie[z] = true;
         }
 
         graph = new ArrayList[n + 1];
@@ -96,7 +98,7 @@ public class Main {
             if (dist[curIdx] != curDist) continue;
 
             for (int next : graph[curIdx]) {
-                if (zombieSet.contains(next)) continue;
+                if (zombie[next]) continue;
 
                 long nextDist = curDist + cost[next];
 
