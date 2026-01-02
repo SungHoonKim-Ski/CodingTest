@@ -22,10 +22,10 @@ public class Main {
 
     static void pro() {
         List<Integer> list = new ArrayList<>();
-        TreeMap<Integer, Integer> map = new TreeMap<>();
+        TreeSet<Integer> set = new TreeSet<>();
         for (int x : arr) {
             list.add(x + SALT);
-            map.put(x + SALT, map.getOrDefault(x + SALT, 0) + 1);
+            set.add(x + SALT);
         }
 
         Collections.sort(list);
@@ -36,8 +36,7 @@ public class Main {
                 int y = list.get(j);
 
                 int z = 2 * y - x;
-                if (map.containsKey(z)) {
-//                    System.out.printf("%d %d %d\n", x, y, z);
+                if (set.contains(z)) {
                     cnt++;
                 }
             }
