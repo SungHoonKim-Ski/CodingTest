@@ -13,7 +13,7 @@ public class Main {
             this.to = to; this.dist = dist;
         }
     }
-    
+
     static long[] costs;
     static int n, m, k;
     static ArrayList<Edge>[] revGraph;
@@ -50,9 +50,7 @@ public class Main {
         costs = new long[n + 1];
         Arrays.fill(costs, 1L << 60);
 
-        for (int goal : goalSet) {
-            dijkstra(goal);
-        }
+        dijkstra();
 
         long[] max = new long[2];
         for (int i = 1; i <= n; i++) {
@@ -66,10 +64,12 @@ public class Main {
         System.out.printf("%d %d", max[0], max[1]);
     }
 
-    static void dijkstra(int start) {
+    static void dijkstra() {
         PriorityQueue<Edge> pq = new PriorityQueue<>((o1, o2) -> Long.compare(o1.dist, o2.dist));
-        costs[start] = 0;
-        pq.add(new Edge(start, 0));
+        for (int goal : goalSet) {
+            costs[goal] = 0;
+            pq.add(new Edge(goal, 0));    
+        }
 
         while (!pq.isEmpty()) {
             Edge cur = pq.poll();
