@@ -2,88 +2,44 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static FastReader scan = new FastReader();
+    static StringTokenizer st;
+    static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     static StringBuilder sb = new StringBuilder();
 
-    static int N, K;
+    static long n, k;
+    static final int MAX_N = 100_000, MAX_K = 1_000_000_000;
 
-    static void input() {
-        N = scan.nextInt();
-        K = scan.nextInt();
-    }
-
-    static boolean determination(long H) {
-
-        long cnt = 0;
-        for (int i = 1; i <= N; i++) {
-            cnt += Math.min(N, H / i);
-        }
-        return cnt >= K;
+    static void input() throws IOException {
+        n = Integer.parseInt(br.readLine());
+        k = Integer.parseInt(br.readLine());
     }
 
     static void pro() {
-        long L = 1, R = Math.min((long) N * N, 1000000000), ans = 1;
-        while (L <= R) {
-            long mid = (L + R) / 2;
-            if (determination(mid)) {
-                ans = mid;
-                R = mid - 1;
-            }else {
-                L = mid + 1;
+        long left = 1, right = MAX_K, res = 1;
+
+        while (left <= right) {
+            long mid = (left + right) / 2;
+            if (check(mid)) {
+                right = mid - 1;
+                res = mid;
+            } else {
+                left = mid + 1;
             }
         }
-        System.out.println(ans);
+
+        System.out.println(res);
     }
 
-    public static void main(String[] args) {
+    static boolean check(long mid) {
+        long cnt = 0;
+        for (long i = 1; i <= n; i++) {
+            cnt += Math.min(n, mid / i);
+        }
+        return cnt >= k;
+    }
+
+    public static void main(String[] args) throws IOException {
         input();
         pro();
-    }
-
-
-    static class FastReader {
-        BufferedReader br;
-        StringTokenizer st;
-
-        public FastReader() {
-            br = new BufferedReader(new InputStreamReader(System.in));
-        }
-
-        public FastReader(String s) throws FileNotFoundException {
-            br = new BufferedReader(new FileReader(new File(s)));
-        }
-
-        String next() {
-            while (st == null || !st.hasMoreElements()) {
-                try {
-                    st = new StringTokenizer(br.readLine());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            return st.nextToken();
-        }
-
-        int nextInt() {
-            return Integer.parseInt(next());
-        }
-
-        long nextLong() {
-            return Long.parseLong(next());
-        }
-
-        double nextDouble() {
-            return Double.parseDouble(next());
-        }
-
-        String nextLine() {
-            String str = "";
-            try {
-                str = br.readLine();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return str;
-        }
     }
 }
