@@ -25,27 +25,15 @@ public class Main {
         }
         if (list.size() == 0) return 0;
 
-        int left = 0, right = 0, size = list.size();
+        int left = 0;
         long sum = 0;
-
-        while (sum < n) {
-            sum += list.get(right);
-            right++;
-        }
-        right--;
-
         int cnt = 0;
-        while (right < size) {
-            if (sum > n) {
-                sum -= list.get(left);
-                left++;
-            } else {
-                if (sum == n) {
-                    cnt++;
-                }
 
-                right++;
-                if (right != size) sum += list.get(right);
+        for (int right = 0; right < list.size(); right++) {
+            sum += list.get(right);
+            while (sum >= n) {
+                if (sum == n) cnt++;
+                sum -= list.get(left++);
             }
         }
 
